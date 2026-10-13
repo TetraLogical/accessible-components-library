@@ -1,0 +1,161 @@
+/* -------------------------------------------------------------------------- */
+/* Accordion                                                                  */
+/* -------------------------------------------------------------------------- */
+
+.tl-accordion {
+  --colour-trigger-text: var(--tl-colour-text, #222222);
+  --colour-trigger-background: var(--tl-colour-surface, #f0f0eb);
+  --colour-trigger-background-expanded: var(--tl-colour-page, #ffffff);
+  --colour-trigger-highlight-expanded: var(--tl-colour-accent, #cc0092);
+
+  --colour-content-text: var(--tl-colour-text, #222222);
+  --colour-content-background: var(--tl-colour-page, #ffffff);
+
+  --colour-link-text: var(--tl-colour-text-link, #7f238b);
+
+  --colour-border: var(--tl-colour-border, #666666);
+
+  --colour-focus-highlight: var(--tl-colour-highlight-focus, #ffc000);
+  --colour-focus-contrasting: var(--tl-colour-page, #ffffff);
+
+  --border-width: 1px;
+}
+
+div.tl-accordion {
+  max-inline-size: 60ch;
+}
+
+/* The trigger, the placeholder shown in its place when there is no JavaScript,
+   and the Show all sections control, which heads the sections */
+.tl-accordion__section > button,
+.tl-accordion__section > p,
+.tl-accordion__toggle-all {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  inline-size: 100%;
+  min-inline-size: 44px;
+  min-block-size: 44px;
+  padding: 0.5rem 1rem;
+  margin: 0;
+  font: inherit;
+  color: var(--colour-trigger-text);
+  text-align: start;
+  background-color: var(--colour-trigger-background);
+  border: var(--border-width) solid var(--colour-border);
+}
+
+.tl-accordion__section > button,
+.tl-accordion__toggle-all {
+  cursor: pointer;
+}
+
+.tl-accordion__section > button svg,
+.tl-accordion__toggle-all svg {
+  flex: none;
+  max-inline-size: 24px;
+  max-block-size: 24px;
+}
+
+/* The content, which the trigger expands and collapses */
+.tl-accordion__section > div {
+  padding: 1rem;
+  color: var(--colour-content-text);
+  background-color: var(--colour-content-background);
+  border: var(--border-width) solid var(--colour-border);
+  border-block-start: none;
+}
+
+/* While collapsed, the content is hidden until found, so the browser can still
+   reveal it for find-in-page and for links to anchors inside it. The element
+   keeps its box in that state, so its padding and border come off, or they
+   would show as a stub under the trigger. In print every section is shown, so
+   the box is left alone there */
+@media screen {
+  .tl-accordion__section > div[hidden] {
+    padding: 0;
+    border: 0;
+  }
+}
+
+.tl-accordion__section + .tl-accordion__section,
+.tl-accordion__toggle-all:not([hidden]) + .tl-accordion__section {
+  margin-block-start: calc(-1 * var(--border-width));
+}
+
+/* State styles */
+.tl-accordion__section > button[aria-expanded="true"] {
+  background-color: var(--colour-trigger-background-expanded);
+  border-block-start: none;
+  border-block-end: none;
+  box-shadow: inset 0 2px 0 0 var(--colour-trigger-highlight-expanded);
+}
+
+.tl-accordion__section > button[aria-expanded="true"] svg {
+  transform: rotate(180deg);
+}
+
+/* Forced colours drop box shadows and background colours, which takes away the
+   expanded trigger's accent stripe and leaves nothing between it and the trigger
+   above or the content below. Draw both as real borders instead, with a thicker
+   top border standing in for the stripe */
+@media (forced-colors: active) {
+  .tl-accordion__section > button[aria-expanded="true"] {
+    border-block-start: 3px solid currentcolor;
+    border-block-end: var(--border-width) solid currentcolor;
+  }
+}
+
+/* The Show all sections control reads as a header, set apart from the triggers below it */
+.tl-accordion__toggle-all {
+  font-weight: bold;
+}
+
+/* The icon turns once every section is open and the control will collapse them */
+.tl-accordion__toggle-all[aria-expanded="true"] svg {
+  transform: rotate(180deg);
+}
+
+/* Hidden controls stay hidden, whatever display value is set above */
+.tl-accordion__section > button[hidden],
+.tl-accordion__toggle-all[hidden] {
+  display: none;
+}
+
+/* Focus styles */
+.tl-accordion__section > button:focus-visible,
+.tl-accordion__toggle-all:focus-visible {
+  outline: 3px solid var(--colour-focus-contrasting);
+  box-shadow: inset 0 0 0 3px var(--colour-focus-highlight);
+}
+
+/* On paper there is nothing to press, so every section is shown and the Show
+   all sections control is left out. The chevrons would point the wrong way
+   for a section shown while collapsed, so they are left blank. The display
+   value on the content is for browsers which treat hidden="until-found" as
+   plain hidden */
+@media print {
+  .tl-accordion__section > div[hidden] {
+    display: block;
+    content-visibility: visible;
+  }
+
+  .tl-accordion__toggle-all {
+    display: none;
+  }
+
+  .tl-accordion__section > button svg {
+    visibility: hidden;
+  }
+}
+
+/* Demo content */
+a.demo-link {
+  color: var(--colour-link-text);
+}
+
+a.demo-link:focus-visible {
+  outline: 3px solid var(--colour-focus-highlight);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 6px var(--colour-focus-contrasting);
+}

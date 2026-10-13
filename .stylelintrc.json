@@ -1,0 +1,16 @@
+{
+  "extends": ["stylelint-config-recess-order"],
+  "plugins": ["stylelint-order", "stylelint-use-logical"],
+  "rules": {
+    "csstools/use-logical": "always"
+  },
+  "overrides": [
+    {
+      "files": [
+        "**/*.webc",
+        "**/*.html"
+      ],
+      "customSyntax": "postcss-html"
+    }
+  ]
+}

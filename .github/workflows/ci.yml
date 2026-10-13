@@ -1,0 +1,54 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    name: Lint, build and test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Build
+        run: npm run build
+
+      # dist/ is committed because the website reads it directly, so a build
+      # that changes it means someone forgot to rebuild before committing
+      - name: Check dist is up to date
+        run: |
+          if ! git diff --quiet -- dist; then
+            echo "dist/ is out of date. Run 'npm run build' and commit the result."
+            git --no-pager diff --stat -- dist
+            exit 1
+          fi
+
+      - name: Install Chromium for Playwright
+        run: npx playwright install --with-deps chromium
+
+      - name: Run the automated test scenarios
+        run: npm run test:auto
+
+      - name: Upload the test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cucumber-report
+          path: _reports/
+          if-no-files-found: ignore

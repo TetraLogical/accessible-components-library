@@ -1,0 +1,108 @@
+/* -------------------------------------------------------------------------- */
+/* Pagination                                                                 */
+/* -------------------------------------------------------------------------- */
+
+.tl-pagination {
+  --colour-link-text: var(--tl-colour-text-link, #7f238b);
+  --colour-link-text-hover: var(
+    --tl-colour-text-link-hover,
+    var(--tl-colour-text-link, #420065)
+  );
+  --colour-link-text-current: var(--tl-colour-page, #ffffff);
+  --colour-link-background-current: var(--tl-colour-primary, #420065);
+  --colour-ellipsis: var(--tl-colour-text, #222222);
+  --colour-focus-highlight: var(--tl-colour-highlight-focus, #7f238b);
+  --colour-focus-contrasting: var(--tl-colour-contrasting-focus, #ffffff);
+
+  /* Must match the maximum number of items rendered in the list */
+  --columns: 10;
+}
+
+nav.tl-pagination {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  max-inline-size: 50ch;
+}
+
+nav.tl-pagination ol {
+  display: grid;
+  grid-template-columns: repeat(var(--columns), minmax(24px, 44px));
+  grid-row: 1;
+  grid-column: 1 / -1;
+  justify-content: space-between;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+/* The hidden text beside each ellipsis keeps the sizing of its utility class,
+   so the span rules leave it alone */
+nav.tl-pagination a,
+nav.tl-pagination span:not(.visually-hidden) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: 24px;
+  min-block-size: 44px;
+}
+
+nav.tl-pagination ol a,
+nav.tl-pagination ol span:not(.visually-hidden) {
+  inline-size: 100%;
+}
+
+nav.tl-pagination a {
+  color: var(--colour-link-text);
+}
+
+nav.tl-pagination span {
+  color: var(--colour-ellipsis);
+}
+
+/* Previous link */
+nav.tl-pagination > a:first-child {
+  grid-row: 2;
+  grid-column: 1;
+  justify-self: start;
+}
+
+/* Next link */
+nav.tl-pagination > ol + a {
+  grid-row: 2;
+  grid-column: 2;
+  justify-self: end;
+}
+
+/* State styles */
+nav.tl-pagination a:visited {
+  color: var(--colour-link-text);
+}
+
+nav.tl-pagination a[aria-current="page"] {
+  font-weight: bold;
+  color: var(--colour-link-text-current);
+  background-color: var(--colour-link-background-current);
+}
+
+nav.tl-pagination a:focus-visible {
+  outline: 3px solid var(--colour-focus-highlight);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 6px var(--colour-focus-contrasting);
+}
+
+nav.tl-pagination a:hover,
+nav.tl-pagination a:visited:hover {
+  color: var(--colour-link-text-hover);
+}
+
+nav.tl-pagination a[aria-current="page"]:hover {
+  color: var(--colour-link-text-current);
+}
+
+/* Background colours are removed in forced colours mode, so use a border to identify the current page */
+@media (forced-colors: active) {
+  nav.tl-pagination a[aria-current="page"] {
+    border: 2px solid currentcolor;
+  }
+}

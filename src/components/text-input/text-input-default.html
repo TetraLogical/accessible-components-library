@@ -1,0 +1,95 @@
+<form id="tl-text-input-demo">
+  <div class="tl-text-input">
+    <label for="input-1"> Full name </label>
+
+    <p id="input-1-hint" class="hint-text">
+      Your full name as it appears on your passport
+    </p>
+
+    <input
+      id="input-1"
+      type="text"
+      autocomplete="name"
+      aria-describedby="input-1-hint"
+    />
+  </div>
+
+  <button hidden>Submit</button>
+</form>
+
+<style>
+  button {
+    margin: 1rem;
+  }
+</style>
+
+<script>
+  /**
+   * This JS is for demo purposes only. It shows the error state when the form
+   * is submitted with the field left blank. A real form would also validate on
+   * the server, and would need a different message for each thing which could
+   * go wrong. The submit button is hidden in the markup and revealed here, so
+   * that it does not appear when the script does not run.
+   */
+
+  const form = document.querySelector("#tl-text-input-demo");
+  const field = form.querySelector(".tl-text-input");
+  const input = field.querySelector("input");
+  const hint = field.querySelector(".hint-text");
+
+  form.querySelector("button").hidden = false;
+
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    if (input.value.trim()) {
+      clearError();
+    } else {
+      showError("Enter your full name");
+    }
+
+    // Focus the field once its state has changed, so the error is announced with it
+    input.focus();
+  });
+
+  // Add the error message above the field, or update the one already there
+  function showError (message) {
+    let error = field.querySelector(".error-message");
+
+    if (!error) {
+      error = document.createElement("p");
+      error.className = "error-message";
+      error.id = `${input.id}-error`;
+      field.insertBefore(error, input);
+    }
+
+    const prefix = document.createElement("span");
+    prefix.className = "visually-hidden";
+    prefix.textContent = "Error: ";
+    error.replaceChildren(prefix, message);
+
+    field.classList.add("tl-text-input--error");
+    input.setAttribute("aria-invalid", "true");
+    describeBy(hint, error);
+  }
+
+  function clearError () {
+    const error = field.querySelector(".error-message");
+    if (error) error.remove();
+
+    field.classList.remove("tl-text-input--error");
+    input.removeAttribute("aria-invalid");
+    describeBy(hint);
+  }
+
+  // Point the field at whatever describes it: the hint, and the error message while it is shown
+  function describeBy (...elements) {
+    const ids = elements.filter(Boolean).map((element) => element.id);
+
+    if (ids.length) {
+      input.setAttribute("aria-describedby", ids.join(" "));
+    } else {
+      input.removeAttribute("aria-describedby");
+    }
+  }
+</script>

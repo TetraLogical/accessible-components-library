@@ -1,0 +1,85 @@
+/* -------------------------------------------------------------------------- */
+/* Breadcrumbs                                                                */
+/* -------------------------------------------------------------------------- */
+
+.tl-breadcrumbs {
+  --colour-link-text: var(--tl-colour-text-link, #7f238b);
+  --colour-link-text-current: var(--tl-colour-text, #222222);
+  --colour-link-accent-current: var(--tl-colour-accent, #cc0092);
+  --colour-link-text-hover: var(--tl-colour-text-link-hover, #7f238b);
+  --colour-background: var(--tl-colour-surface, #f0f0eb);
+  --colour-separator: var(--tl-colour-text, #222222);
+  --colour-focus-highlight: var(--tl-colour-highlight-focus, #7f238b);
+  --colour-focus-contrasting: var(--tl-colour-contrasting-focus, #ffffff);
+}
+
+nav.tl-breadcrumbs {
+  padding: 0.5rem;
+  background-color: var(--colour-background);
+}
+
+nav.tl-breadcrumbs ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 1em;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+nav.tl-breadcrumbs li {
+  align-self: center;
+}
+
+nav.tl-breadcrumbs div {
+  display: flex;
+  align-items: center;
+}
+
+nav.tl-breadcrumbs div::before {
+  display: block;
+  flex-shrink: 0;
+  block-size: 0.8em;
+  margin-inline-end: 1rem;
+  color: var(--colour-separator);
+  content: "";
+  border-inline-end: 0.1em solid currentcolor;
+  transform: rotate(15deg);
+}
+
+nav.tl-breadcrumbs li:first-of-type div::before {
+  display: none;
+}
+
+nav.tl-breadcrumbs a {
+  display: inline-flex;
+  align-items: center;
+  align-self: center;
+  min-inline-size: 44px;
+  min-block-size: 44px;
+  color: var(--colour-link-text);
+}
+
+/* State styles */
+nav.tl-breadcrumbs a:visited {
+  color: var(--colour-link-text);
+}
+
+nav.tl-breadcrumbs a[aria-current="page"] {
+  font-weight: bold;
+  color: var(--colour-link-text-current);
+  text-decoration-thickness: 0.2em;
+  text-decoration-color: var(--colour-link-accent-current);
+  text-underline-offset: 0.2em;
+}
+
+nav.tl-breadcrumbs a:focus-visible {
+  outline: 3px solid var(--colour-focus-highlight);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 6px var(--colour-focus-contrasting);
+}
+
+nav.tl-breadcrumbs a:hover,
+nav.tl-breadcrumbs a:visited:hover {
+  color: var(--colour-link-text-hover);
+}

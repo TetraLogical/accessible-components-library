@@ -1,0 +1,61 @@
+/* -------------------------------------------------------------------------- */
+/* Textarea                                                                   */
+/* -------------------------------------------------------------------------- */
+
+.tl-textarea {
+  --colour-text: var(--tl-colour-text, #222222);
+  --colour-background: var(--tl-colour-page, #ffffff);
+  --colour-border: var(--tl-colour-text, #222222);
+  --colour-hint: var(--tl-colour-grey, #666666);
+  --colour-error: var(--tl-colour-error, #ca3535);
+  --colour-focus-highlight: var(--tl-colour-highlight-focus, #7f238b);
+  --colour-focus-contrasting: var(--tl-colour-text, #222222);
+}
+
+.tl-textarea {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  max-inline-size: 60ch;
+  padding: 1rem;
+  color: var(--colour-text);
+}
+
+.tl-textarea textarea {
+  block-size: 8rem;
+  padding: 0.5em;
+  font-size: 1rem;
+  color: var(--colour-text);
+  background-color: var(--colour-background);
+  border: 2px solid var(--colour-border);
+  border-radius: 0;
+}
+
+.tl-textarea label {
+  font-weight: 700;
+}
+
+.tl-textarea .hint-text {
+  margin-block: 0;
+  color: var(--colour-hint);
+}
+
+.tl-textarea textarea:focus-visible {
+  outline: 5px solid var(--colour-focus-highlight);
+  box-shadow: inset 0 0 0 2px var(--colour-focus-contrasting);
+}
+
+.tl-textarea--error {
+  padding-inline-start: 1.5rem;
+  border-inline-start: 0.4rem solid var(--colour-error);
+}
+
+.tl-textarea--error .error-message {
+  margin-block: 0;
+  font-weight: 700;
+  color: var(--colour-error);
+}
+
+.tl-textarea--error textarea:not(:focus-visible) {
+  border-color: var(--colour-error);
+}

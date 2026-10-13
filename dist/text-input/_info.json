@@ -1,0 +1,10 @@
+{
+  "lastUpdated": null,
+  "hasCSS": true,
+  "hasJS": false,
+  "variants": [
+    "default",
+    "error",
+    "without-hint"
+  ]
+}

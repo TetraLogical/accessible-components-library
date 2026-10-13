@@ -1,0 +1,99 @@
+/* -------------------------------------------------------------------------- */
+/* Boilerplate CSS                                                            */
+/* -------------------------------------------------------------------------- */
+
+/* Tokens base */
+:root {
+  --tl-colour-white: #ffffff;
+  --tl-colour-off-white: #f0f0eb;
+  --tl-colour-black: #222222;
+  --tl-colour-off-black: #333333;
+}
+
+/* Tokens light mode */
+body,
+[data-color-scheme-resolved="light"] body,
+[data-user-color-scheme="light"] body {
+  /* Colour variables */
+  --tl-colour-primary: #420065;
+  --tl-colour-inclusive: #7f238b;
+  --tl-colour-ethical: #cc0092;
+  --tl-colour-sustainable: #ff1958;
+  --tl-colour-original: #e06500;
+
+  --tl-colour-grey: #666666;
+  --tl-colour-bright: #ffc000;
+  --tl-colour-error: #ca3535;
+
+  /* Semantic variables */
+  --tl-colour-page: var(--tl-colour-white);
+  --tl-colour-surface: var(--tl-colour-off-white);
+  --tl-colour-border: var(--tl-colour-grey);
+
+  --tl-colour-text: var(--tl-colour-off-black);
+  --tl-colour-text-link: var(--tl-colour-inclusive);
+  --tl-colour-text-link-hover: var(--tl-colour-primary);
+
+  --tl-colour-highlight-focus: var(--tl-colour-inclusive);
+  --tl-colour-contrasting-focus: var(--tl-colour-page);
+
+  --tl-colour-accent: var(--tl-colour-ethical);
+}
+
+/* Tokens dark mode */
+[data-color-scheme-resolved="dark"] body,
+[data-user-color-scheme="dark"] body {
+  /* Colour variables */
+  --tl-colour-primary: #e7d8ef;
+  --tl-colour-inclusive: #cc81d6;
+  --tl-colour-ethical: #ff0aba;
+  --tl-colour-sustainable: #ff386d;
+  --tl-colour-original: #f06c00;
+  --tl-colour-grey: #8a8a8a;
+  --tl-colour-bright: #ffc000;
+  --tl-colour-error: #ff6a6a;
+
+  /* Semantic variables */
+  --tl-colour-page: var(--tl-colour-black);
+  --tl-colour-surface: var(--tl-colour-off-black);
+  --tl-colour-border: var(--tl-colour-grey);
+
+  --tl-colour-text: var(--tl-colour-off-white);
+  --tl-colour-text-link: var(--tl-colour-inclusive);
+  --tl-colour-text-link-hover: var(--tl-colour-primary);
+
+  --tl-colour-highlight-focus: var(--tl-colour-bright);
+  --tl-colour-contrasting-focus: var(--tl-colour-black);
+
+  --tl-colour-accent: var(--tl-colour-ethical);
+}
+
+/* Box sizing */
+html { box-sizing: border-box; }
+*, *::before, *::after { box-sizing: inherit; }
+
+/* Bare minimum styling */
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  color: var(--tl-colour-text);
+  background-color: var(--tl-colour-page);
+}
+
+p {
+  max-inline-size: 60ch;
+}
+
+/* Utilities */
+.visually-hidden {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  color: var(--tl-colour-black);
+  white-space: nowrap;
+  background-color: var(--tl-colour-white);
+  border: 0;
+  clip: rect(0, 0, 0, 0);
+}

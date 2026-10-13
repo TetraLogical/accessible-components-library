@@ -1,0 +1,33 @@
+<h1>Dialog</h1>
+
+<p>
+  A modal dialog blocks interaction with the rest of the page. This paragraph
+  contains a focusable link to
+  <a class="demo-link" href="https://tetralogical.com">the TetraLogical website</a>
+  for demo purposes, to show that it becomes inert and is not focusable while
+  the dialog is open.
+</p>
+
+<button type="button" id="dialog-trigger" class="tl-dialog__button" command="show-modal" commandfor="dialog-modal">
+  Open modal
+</button>
+
+<dialog id="dialog-modal" class="tl-dialog" tabindex="-1" aria-modal="true" aria-labelledby="dialog-modal-heading">
+  <h2 id="dialog-modal-heading">
+    Do you want to delete your account?
+  </h2>
+
+  <p>
+    This is a demo. No data will actually be deleted.
+  </p>
+
+  <div class="tl-dialog__actions">
+    <button type="button" id="dialog-cancel" class="tl-dialog__button" command="close" commandfor="dialog-modal">
+      No
+    </button>
+
+    <button type="button" id="dialog-confirm" class="tl-dialog__button tl-dialog__button--destructive" command="close" commandfor="dialog-modal">
+      Yes
+    </button>
+  </div>
+</dialog>

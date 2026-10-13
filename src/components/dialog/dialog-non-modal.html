@@ -1,0 +1,29 @@
+<h1>Dialog</h1>
+
+<p>
+  A non-modal dialog does not block interaction with the rest of the page. This
+  paragraph contains a focusable link to
+  <a class="demo-link" href="https://tetralogical.com">the TetraLogical website</a>
+  for demo purposes, to show that it remains focusable while the dialog is open.
+</p>
+
+<button type="button" id="dialog-trigger" class="tl-dialog__button" command="--show" commandfor="dialog-non-modal" hidden>
+  Open dialog
+</button>
+
+<dialog id="dialog-non-modal" class="tl-dialog tl-dialog--non-modal" tabindex="-1" aria-labelledby="dialog-non-modal-heading" open>
+  <h2 id="dialog-non-modal-heading">Non-modal example</h2>
+
+  <p>
+    Non-modal dialog allows the user to still focus on background elements.
+    We recommend allowing keyboard users to close the dialog using <kbd>Esc</kbd>
+    as well as having a physical close button.
+  </p>
+
+  <button type="button" id="dialog-close" class="tl-dialog__close" command="close" commandfor="dialog-non-modal" hidden>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
+      <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="m6 6 12 12M18 6 6 18" />
+    </svg>
+    <span class="visually-hidden">Close</span>
+  </button>
+</dialog>

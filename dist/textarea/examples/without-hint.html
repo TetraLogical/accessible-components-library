@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Textarea - Without hint</title>
+    <style>
+      /* -------------------------------------------------------------------------- */
+      /* Boilerplate CSS                                                            */
+      /* -------------------------------------------------------------------------- */
+
+      /* Tokens base */
+      :root {
+        --tl-colour-white: #ffffff;
+        --tl-colour-off-white: #f0f0eb;
+        --tl-colour-black: #222222;
+        --tl-colour-off-black: #333333;
+      }
+
+      /* Tokens light mode */
+      body,
+      [data-color-scheme-resolved="light"] body,
+      [data-user-color-scheme="light"] body {
+        /* Colour variables */
+        --tl-colour-primary: #420065;
+        --tl-colour-inclusive: #7f238b;
+        --tl-colour-ethical: #cc0092;
+        --tl-colour-sustainable: #ff1958;
+        --tl-colour-original: #e06500;
+
+        --tl-colour-grey: #666666;
+        --tl-colour-bright: #ffc000;
+        --tl-colour-error: #ca3535;
+
+        /* Semantic variables */
+        --tl-colour-page: var(--tl-colour-white);
+        --tl-colour-surface: var(--tl-colour-off-white);
+        --tl-colour-border: var(--tl-colour-grey);
+
+        --tl-colour-text: var(--tl-colour-off-black);
+        --tl-colour-text-link: var(--tl-colour-inclusive);
+        --tl-colour-text-link-hover: var(--tl-colour-primary);
+
+        --tl-colour-highlight-focus: var(--tl-colour-inclusive);
+        --tl-colour-contrasting-focus: var(--tl-colour-page);
+
+        --tl-colour-accent: var(--tl-colour-ethical);
+      }
+
+      /* Tokens dark mode */
+      [data-color-scheme-resolved="dark"] body,
+      [data-user-color-scheme="dark"] body {
+        /* Colour variables */
+        --tl-colour-primary: #e7d8ef;
+        --tl-colour-inclusive: #cc81d6;
+        --tl-colour-ethical: #ff0aba;
+        --tl-colour-sustainable: #ff386d;
+        --tl-colour-original: #f06c00;
+        --tl-colour-grey: #8a8a8a;
+        --tl-colour-bright: #ffc000;
+        --tl-colour-error: #ff6a6a;
+
+        /* Semantic variables */
+        --tl-colour-page: var(--tl-colour-black);
+        --tl-colour-surface: var(--tl-colour-off-black);
+        --tl-colour-border: var(--tl-colour-grey);
+
+        --tl-colour-text: var(--tl-colour-off-white);
+        --tl-colour-text-link: var(--tl-colour-inclusive);
+        --tl-colour-text-link-hover: var(--tl-colour-primary);
+
+        --tl-colour-highlight-focus: var(--tl-colour-bright);
+        --tl-colour-contrasting-focus: var(--tl-colour-black);
+
+        --tl-colour-accent: var(--tl-colour-ethical);
+      }
+
+      /* Box sizing */
+      html {
+        box-sizing: border-box;
+      }
+      *,
+      *::before,
+      *::after {
+        box-sizing: inherit;
+      }
+
+      /* Bare minimum styling */
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+        color: var(--tl-colour-text);
+        background-color: var(--tl-colour-page);
+      }
+
+      p {
+        max-inline-size: 60ch;
+      }
+
+      /* Utilities */
+      .visually-hidden {
+        position: absolute;
+        inline-size: 1px;
+        block-size: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        color: var(--tl-colour-black);
+        white-space: nowrap;
+        background-color: var(--tl-colour-white);
+        border: 0;
+        clip: rect(0, 0, 0, 0);
+      }
+    </style>
+    <style>
+      /* -------------------------------------------------------------------------- */
+      /* Textarea                                                                   */
+      /* -------------------------------------------------------------------------- */
+
+      .tl-textarea {
+        --colour-text: var(--tl-colour-text, #222222);
+        --colour-background: var(--tl-colour-page, #ffffff);
+        --colour-border: var(--tl-colour-text, #222222);
+        --colour-hint: var(--tl-colour-grey, #666666);
+        --colour-error: var(--tl-colour-error, #ca3535);
+        --colour-focus-highlight: var(--tl-colour-highlight-focus, #7f238b);
+        --colour-focus-contrasting: var(--tl-colour-text, #222222);
+      }
+
+      .tl-textarea {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5em;
+        max-inline-size: 60ch;
+        padding: 1rem;
+        color: var(--colour-text);
+      }
+
+      .tl-textarea textarea {
+        block-size: 8rem;
+        padding: 0.5em;
+        font-size: 1rem;
+        color: var(--colour-text);
+        background-color: var(--colour-background);
+        border: 2px solid var(--colour-border);
+        border-radius: 0;
+      }
+
+      .tl-textarea label {
+        font-weight: 700;
+      }
+
+      .tl-textarea .hint-text {
+        margin-block: 0;
+        color: var(--colour-hint);
+      }
+
+      .tl-textarea textarea:focus-visible {
+        outline: 5px solid var(--colour-focus-highlight);
+        box-shadow: inset 0 0 0 2px var(--colour-focus-contrasting);
+      }
+
+      .tl-textarea--error {
+        padding-inline-start: 1.5rem;
+        border-inline-start: 0.4rem solid var(--colour-error);
+      }
+
+      .tl-textarea--error .error-message {
+        margin-block: 0;
+        font-weight: 700;
+        color: var(--colour-error);
+      }
+
+      .tl-textarea--error textarea:not(:focus-visible) {
+        border-color: var(--colour-error);
+      }
+    </style>
+  </head>
+
+  <body>
+    <main>
+      <div class="tl-textarea">
+        <label for="textarea-1"> Message (optional) </label>
+
+        <textarea id="textarea-1"></textarea>
+      </div>
+    </main>
+
+    <script>
+      /* -------------------------------------------------------------------------- */
+      /* Boilerplate JS                                                             */
+      /* -------------------------------------------------------------------------- */
+
+      // Record the resolved colour scheme on <html>, so the stylesheet can switch its
+      // tokens. A page which sets data-user-color-scheme itself is left alone
+      const darkMode = window.matchMedia("(prefers-color-scheme: dark)");
+
+      function applyColourScheme() {
+        if (document.documentElement.hasAttribute("data-user-color-scheme"))
+          return;
+        document.documentElement.setAttribute(
+          "data-color-scheme-resolved",
+          darkMode.matches ? "dark" : "light",
+        );
+      }
+
+      darkMode.addEventListener("change", applyColourScheme);
+      applyColourScheme();
+    </script>
+  </body>
+</html>

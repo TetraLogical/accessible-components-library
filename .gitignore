@@ -1,0 +1,10 @@
+# General
+.DS_Store
+node_modules
+.vscode/
+
+# Repo
+**/*.backup
+.cache
+_dist
+_reports

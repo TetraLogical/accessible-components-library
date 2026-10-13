@@ -1,0 +1,163 @@
+/* -------------------------------------------------------------------------- */
+/* Dialog                                                                     */
+/* -------------------------------------------------------------------------- */
+
+/* Tokens are declared on the dialog and on the controls which sit outside it */
+.tl-dialog,
+.tl-dialog__button,
+.tl-dialog__close {
+  --colour-dialog-text: var(--tl-colour-text, #333333);
+  --colour-dialog-background: var(--tl-colour-page, #ffffff);
+  --colour-dialog-border: var(--tl-colour-border, #666666);
+
+  --colour-button-text: var(--tl-colour-text, #333333);
+  --colour-button-background: var(--tl-colour-surface, #f0f0eb);
+  --colour-button-border: var(--tl-colour-border, #666666);
+  --colour-button-destructive-border: var(--tl-colour-error, #ca3535);
+
+  --colour-focus-highlight: var(--tl-colour-highlight-focus, #7f238b);
+  --colour-focus-contrasting: var(--tl-colour-page, #ffffff);
+
+  --border-width: 2px;
+}
+
+/* The dialog surface, shared by the modal and non-modal variants */
+.tl-dialog {
+  max-inline-size: min(35rem, calc(100vw - 2rem));
+  padding: 1.5rem;
+  color: var(--colour-dialog-text);
+  background-color: var(--colour-dialog-background);
+  border: var(--border-width) solid var(--colour-dialog-border);
+}
+
+/* Dim the page behind a modal dialog */
+.tl-dialog::backdrop {
+  background-color: rgb(0 0 0 / 60%);
+}
+
+/* The browser makes the page behind a modal dialog inert, but still lets it
+   scroll, so lock it in place until the dialog is dismissed */
+html:has(.tl-dialog:modal) {
+  overflow: hidden;
+}
+
+/* A non-modal dialog is open in the markup, so that it can be read without the
+   script. The browser would position it absolutely and centre it, so until the
+   script has taken over it is made a plain block in the flow of the page */
+.tl-dialog--non-modal:not([data-enhanced]) {
+  position: static;
+  inline-size: auto;
+  margin: 0;
+}
+
+/* Once the script has closed the non-modal dialog and given it a data-enhanced
+   attribute, it sits out of the way in the corner of the page */
+.tl-dialog--non-modal[data-enhanced] {
+  position: fixed;
+  inset-block: auto 1rem;
+  inset-inline: auto 1rem;
+  margin: 0;
+}
+
+/* When a non-modal dialog completely covers the element which has keyboard
+   focus, the script gives it a data-focus-behind attribute and a
+   --dialog-focus-offset custom property. The offset moves the dialog along
+   from the inline start of the viewport, so that it begins just past the
+   focused element and the focus indicator can be seen.
+
+   The dialog keeps its size and is allowed to run off the edge of the viewport.
+   In this moment, uncovering the focus indicator matters more than keeping the 
+   whole dialog in view, and at narrow widths there is nowhere else for it to go. 
+   Sizing it to max-content keeps it the width it already was; otherwise it would 
+   shrink to fit the space left between the offset and the edge of the viewport, 
+   and grow much taller. */
+.tl-dialog--non-modal[data-focus-behind] {
+  inset-inline: var(--dialog-focus-offset, auto) auto;
+  inline-size: max-content;
+}
+
+/* The dialog itself is focused when it opens, so it needs no indicator of its own */
+.tl-dialog:focus-visible {
+  outline: none;
+}
+
+.tl-dialog h2 {
+  margin-block: 0 1rem;
+}
+
+/* The close button comes last in the markup, so people reach the content before
+   it and it is the last control before leaving the dialog. It still sits in the
+   top corner, where people expect to find it, with the heading kept clear of it */
+.tl-dialog__close {
+  position: absolute;
+  inset-block-start: 1.5rem;
+  inset-inline-end: 1.5rem;
+}
+
+.tl-dialog:has(.tl-dialog__close:not([hidden])) h2 {
+  padding-inline-end: calc(44px + 1rem);
+}
+
+/* Row of buttons which dismiss the dialog */
+.tl-dialog__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-block-start: 1.5rem;
+}
+
+/* Controls which open and dismiss the dialog */
+.tl-dialog__button,
+.tl-dialog__close {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: 44px;
+  min-block-size: 44px;
+  padding: 0.5rem 1rem;
+  font: inherit;
+  color: var(--colour-button-text);
+  cursor: pointer;
+  background-color: var(--colour-button-background);
+  border: var(--border-width) solid var(--colour-button-border);
+}
+
+/* Hidden controls stay hidden, whatever display value is set above */
+.tl-dialog__button[hidden],
+.tl-dialog__close[hidden] {
+  display: none;
+}
+
+/* Destructive actions are marked out with the error colour */
+.tl-dialog__button--destructive {
+  border-color: var(--colour-button-destructive-border);
+}
+
+/* The icon-only close button is square, so it needs no horizontal padding */
+.tl-dialog__close {
+  padding: 0.5rem;
+}
+
+.tl-dialog__close svg {
+  inline-size: 24px;
+  block-size: 24px;
+}
+
+/* Focus styles, which stay visible against light and dark backgrounds */
+.tl-dialog__button:focus-visible,
+.tl-dialog__close:focus-visible {
+  outline: 3px solid var(--colour-focus-contrasting);
+  box-shadow: inset 0 0 0 3px var(--colour-focus-highlight);
+}
+
+/* Demo content. The link sits outside the dialog, so it uses the page tokens */
+a.demo-link {
+  color: var(--tl-colour-text-link);
+}
+
+a.demo-link:focus-visible {
+  outline: 3px solid var(--tl-colour-highlight-focus);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 6px var(--tl-colour-page);
+}

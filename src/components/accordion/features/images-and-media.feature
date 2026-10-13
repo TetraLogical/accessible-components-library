@@ -1,0 +1,37 @@
+@accordion @images-and-media
+Feature: Accordion — Images and media
+  Helping people to access (and remove distractions caused by) image, video and audio content
+
+  User story:
+    As a person who cannot see images
+    I want appropriate text alternatives for images
+    so that I can access the same information as everyone else.
+
+  Background:
+    Given I load the sample "http://localhost:8081/accordion/examples/default"
+
+  # ----------------------------------------------------------------------------
+  # Perceivable
+  # ----------------------------------------------------------------------------
+
+  @1.1.1 @a @automatic
+  Rule: 1.1.1 Non-text Content, Level A
+    Scenario: The icon is hidden from screen readers, because the trigger has a visible text label
+      When I inspect ".tl-accordion__section:nth-of-type(1) > button svg" in the DOM
+      Then it should have the attribute "aria-hidden" with the value "true"
+      When I inspect ".tl-accordion__section:nth-of-type(1) > button" in the Accessibility Tree
+      Then its accessible name should be "What is an accessibility audit?"
+
+  @1.1.1 @a @automatic
+  Rule: 1.1.1 Non-text Content, Level A
+    Scenario: The Show all sections button's icon is hidden from screen readers, because the button has a visible text label
+      When I inspect ".tl-accordion__toggle-all svg" in the DOM
+      Then it should have the attribute "aria-hidden" with the value "true"
+      When I inspect ".tl-accordion__toggle-all" in the Accessibility Tree
+      Then its accessible name should be "Show all sections"
+
+  @1.1.1 @a @automatic
+  Rule: 1.1.1 Non-text Content, Level A
+    Scenario: If a trigger uses an icon without a visible text label, the icon has a text description
+      When I view the rendered ".tl-accordion"
+      Then any icon should have a text description, or be hidden from assistive technologies

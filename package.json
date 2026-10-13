@@ -1,0 +1,77 @@
+{
+  "name": "accessible-components-library",
+  "version": "1.0.0",
+  "description": "A collection of components which have been tested for accessibility.",
+  "type": "module",
+  "engines": {
+    "node": "^22.13.0 || >=24"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TetraLogical/accessible-components-library.git"
+  },
+  "keywords": [
+    "accessibility",
+    "a11y",
+    "components"
+  ],
+  "author": "TetraLogical",
+  "license": "ISC",
+  "homepage": "https://github.com/TetraLogical/accessible-components-library#readme",
+  "bugs": {
+    "url": "https://github.com/TetraLogical/accessible-components-library/issues"
+  },
+  "scripts": {
+    "build": "node lib/build/run.js",
+    "dev": "node lib/dev/build-and-watch.js",
+    "deploy": "node lib/deploy/run.js",
+    "start": "node lib/build/run.js && serve -p 8080 dist",
+    "test:serve": "node lib/build/run.js && serve dist -p 8081 --no-request-logging",
+    "test": "start-server-and-test test:serve http://localhost:8081 'cucumber-js -p default'",
+    "test:auto": "start-server-and-test test:serve http://localhost:8081 'cucumber-js -p auto'",
+    "test:manual": "start-server-and-test test:serve http://localhost:8081 'cucumber-js -p manual'",
+    "test:component": "start-server-and-test test:serve http://localhost:8081 'cucumber-js -p component'",
+    "test:levelA": "start-server-and-test test:serve http://localhost:8081 'cucumber-js -p levelA'",
+    "test:levelAA": "start-server-and-test test:serve http://localhost:8081 'cucumber-js -p levelAA'",
+    "test:levelAA:only": "start-server-and-test test:serve http://localhost:8081 'cucumber-js -p levelAAOnly'",
+    "test:levelAAA": "start-server-and-test test:serve http://localhost:8081 'cucumber-js -p levelAAA'",
+    "test:levelAAA:only": "start-server-and-test test:serve http://localhost:8081 'cucumber-js -p levelAAAOnly'",
+    "test:recommendation": "start-server-and-test test:serve http://localhost:8081 'cucumber-js -p recommendation'",
+    "test:sc": "start-server-and-test test:serve http://localhost:8081 'cucumber-js -p sc'",
+    "test:only": "start-server-and-test test:serve http://localhost:8081 'cucumber-js -p only'",
+    "lint": "eslint . && stylelint \"src/**/*.css\""
+  },
+  "devDependencies": {
+    "@cucumber/cucumber": "^13.2.1",
+    "@cucumber/cucumber-expressions": "^20.1.0",
+    "@cucumber/gherkin": "^42.0.1",
+    "@cucumber/messages": "^34.2.1",
+    "@playwright/test": "^1.61.0",
+    "date-fns": "^4.4.0",
+    "eslint": "^9.0.0",
+    "eslint-plugin-html": "^8.1.4",
+    "html-validate": "^11.5.3",
+    "neostandard": "^0.13.0",
+    "prettier": "^3.8.4",
+    "serve": "^14.2.6",
+    "start-server-and-test": "^3.0.11",
+    "stylelint": "^17.13.0",
+    "stylelint-config-recess-order": "^7.7.0",
+    "stylelint-config-standard": "^40.0.0",
+    "stylelint-order": "^8.1.1",
+    "stylelint-use-logical": "^2.1.3",
+    "wcag-contrast": "^3.0.0"
+  },
+  "imports": {
+    "#root/*": "./*",
+    "#sharedAssertions/*": "./src/tests/_shared-assertions/*",
+    "#sharedSteps/*": "./src/tests/_shared-steps/*",
+    "#utils/*": "./src/tests/_utils/*"
+  },
+  "dependencies": {
+    "colors": "^1.4.0"
+  },
+  "overrides": {
+    "compression": "^1.8.2"
+  }
+}

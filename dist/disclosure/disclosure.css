@@ -1,0 +1,196 @@
+/* -------------------------------------------------------------------------- */
+/* Disclosure                                                                 */
+/* -------------------------------------------------------------------------- */
+
+.tl-disclosure {
+  --colour-trigger-text: var(--tl-colour-text-link, #7f238b);
+  --colour-trigger-text-hover: var(--tl-colour-text-link-hover, #420065);
+
+  --colour-content-text: var(--tl-colour-text, #222222);
+
+  --colour-link-text: var(--tl-colour-text-link, #7f238b);
+
+  --colour-border: var(--tl-colour-border, #666666);
+
+  --colour-focus-highlight: var(--tl-colour-highlight-focus, #ffc000);
+  --colour-focus-contrasting: var(--tl-colour-page, #ffffff);
+
+  /* The measurements the content's border is lined up against */
+  --trigger-padding-inline: 0.5rem;
+  --icon-size: 24px;
+  --icon-gap: 0.5rem;
+  --border-width: 4px;
+}
+
+.tl-disclosure {
+  max-inline-size: 60ch;
+}
+
+/* The summary before the script runs, and the button it is
+   rebuilt into, which may use a heading */
+.tl-disclosure > summary,
+.tl-disclosure > button,
+.tl-disclosure > :is(h1, h2, h3, h4, h5, h6) > button {
+  display: flex;
+  gap: var(--icon-gap);
+  align-items: center;
+  inline-size: 100%;
+  min-inline-size: 44px;
+  min-block-size: 44px;
+  padding: 0.5rem var(--trigger-padding-inline);
+  margin: 0;
+  font: inherit;
+  color: var(--colour-trigger-text);
+  text-align: start;
+  background: none;
+  border: none;
+}
+
+/* Before the script runs, a plain triangle stands in for the chevron. It is
+   text, so it keeps the trigger colour and survives Windows contrast themes,
+   it sits in the same space as the chevron so the content lines up the
+   same way. The browser's own marker is removed, as it only shows while the
+   summary is a list item, and that would leave its label out of alignment */
+.tl-disclosure > summary {
+  box-sizing: border-box;
+  cursor: pointer;
+  list-style: none;
+}
+
+.tl-disclosure > summary::-webkit-details-marker {
+  display: none;
+}
+
+/* The triangle is decorative, so it is given empty alternative text to keep it
+   out of the summary's accessible name, or screen readers announce it. The
+   plain value before it is for browsers which do not understand the
+   alternative text form, and would otherwise show nothing */
+.tl-disclosure > summary::before {
+  flex: none;
+  inline-size: var(--icon-size);
+  font-size: 1.2rem;
+  text-align: center;
+  content: "\25B8";
+  content: "\25B8" / "";
+}
+
+.tl-disclosure[open] > summary::before {
+  content: "\25BE";
+  content: "\25BE" / "";
+}
+
+/* A heading keeps its semantics but takes the trigger's size, so a disclosure
+   looks the same with or without one */
+.tl-disclosure > summary > :is(h1, h2, h3, h4, h5, h6),
+.tl-disclosure > :is(h1, h2, h3, h4, h5, h6) {
+  margin: 0;
+  font: inherit;
+}
+
+.tl-disclosure button {
+  cursor: pointer;
+}
+
+.tl-disclosure > summary:hover,
+.tl-disclosure button:hover {
+  color: var(--colour-trigger-text-hover);
+}
+
+.tl-disclosure button svg {
+  flex: none;
+  inline-size: var(--icon-size);
+  block-size: var(--icon-size);
+}
+
+/* The content, which expands and collapses. Its border runs from the centre of
+   the chevron, and its text lines up with the label, so it is clear which
+   trigger the content belongs to */
+.tl-disclosure > div {
+  padding-block: 0.5rem;
+  padding-inline-start: calc(
+    var(--icon-size) / 2 + var(--icon-gap) - var(--border-width) / 2
+  );
+  margin-inline-start: calc(
+    var(--trigger-padding-inline) + var(--icon-size) / 2 - var(--border-width) /
+      2
+  );
+  color: var(--colour-content-text);
+  border-inline-start: var(--border-width) solid var(--colour-border);
+}
+
+.tl-disclosure > div > :first-child {
+  margin-block-start: 0;
+}
+
+.tl-disclosure > div > :last-child {
+  margin-block-end: 0;
+}
+
+/* While collapsed, the content is hidden until found, so the browser can still
+   reveal it for find-in-page and for links to anchors inside it. The element
+   keeps its box in that state, so its padding and border come off, or they
+   would show as a stub under the trigger. In print every panel is shown, so
+   the box is left alone there */
+@media screen {
+  .tl-disclosure > div[hidden] {
+    padding-block: 0;
+    border-inline-start-width: 0;
+  }
+}
+
+/* State styles: the chevron points down while collapsed, and up while expanded */
+.tl-disclosure button[aria-expanded="true"] svg {
+  transform: rotate(180deg);
+}
+
+/* Focus styles */
+.tl-disclosure > summary:focus-visible,
+.tl-disclosure button:focus-visible {
+  outline: 3px solid var(--colour-focus-contrasting);
+  box-shadow: inset 0 0 0 3px var(--colour-focus-highlight);
+}
+
+/* Under a Windows contrast theme, Firefox colours a hovered button with the
+   theme's selected item text colour and expects the selected item background
+   behind it, but it keeps the transparent background above, so the text lands
+   on the page background instead and fails contrast requirements. The fix is
+   to keep the text in the button colour. */
+@media (forced-colors: active) {
+  .tl-disclosure button:hover {
+    color: ButtonText;
+  }
+}
+
+/* On paper there is nothing to press, so every panel is shown. The chevron
+   would point the wrong way for a panel shown while collapsed, so it is left
+   blank. It keeps its space, so the content's border still lines up with the
+   label. The display value is for browsers which treat hidden="until-found"
+   as plain hidden */
+@media print {
+  .tl-disclosure > div[hidden] {
+    display: block;
+    content-visibility: visible;
+  }
+
+  .tl-disclosure button svg,
+  .tl-disclosure > summary::before {
+    visibility: hidden;
+  }
+
+  /* Without the script, the content is still inside a native <details>, which
+     browsers with the ::details-content pseudo-element can be made to print */
+  .tl-disclosure:not([open])::details-content {
+    content-visibility: visible;
+  }
+}
+
+/* Demo content */
+a.demo-link {
+  color: var(--colour-link-text);
+}
+
+a.demo-link:focus-visible {
+  outline: 3px solid var(--colour-focus-highlight);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 6px var(--colour-focus-contrasting);
+}

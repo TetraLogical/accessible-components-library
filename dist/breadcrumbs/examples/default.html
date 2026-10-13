@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Breadcrumbs - Default</title>
+    <style>
+      /* -------------------------------------------------------------------------- */
+      /* Boilerplate CSS                                                            */
+      /* -------------------------------------------------------------------------- */
+
+      /* Tokens base */
+      :root {
+        --tl-colour-white: #ffffff;
+        --tl-colour-off-white: #f0f0eb;
+        --tl-colour-black: #222222;
+        --tl-colour-off-black: #333333;
+      }
+
+      /* Tokens light mode */
+      body,
+      [data-color-scheme-resolved="light"] body,
+      [data-user-color-scheme="light"] body {
+        /* Colour variables */
+        --tl-colour-primary: #420065;
+        --tl-colour-inclusive: #7f238b;
+        --tl-colour-ethical: #cc0092;
+        --tl-colour-sustainable: #ff1958;
+        --tl-colour-original: #e06500;
+
+        --tl-colour-grey: #666666;
+        --tl-colour-bright: #ffc000;
+        --tl-colour-error: #ca3535;
+
+        /* Semantic variables */
+        --tl-colour-page: var(--tl-colour-white);
+        --tl-colour-surface: var(--tl-colour-off-white);
+        --tl-colour-border: var(--tl-colour-grey);
+
+        --tl-colour-text: var(--tl-colour-off-black);
+        --tl-colour-text-link: var(--tl-colour-inclusive);
+        --tl-colour-text-link-hover: var(--tl-colour-primary);
+
+        --tl-colour-highlight-focus: var(--tl-colour-inclusive);
+        --tl-colour-contrasting-focus: var(--tl-colour-page);
+
+        --tl-colour-accent: var(--tl-colour-ethical);
+      }
+
+      /* Tokens dark mode */
+      [data-color-scheme-resolved="dark"] body,
+      [data-user-color-scheme="dark"] body {
+        /* Colour variables */
+        --tl-colour-primary: #e7d8ef;
+        --tl-colour-inclusive: #cc81d6;
+        --tl-colour-ethical: #ff0aba;
+        --tl-colour-sustainable: #ff386d;
+        --tl-colour-original: #f06c00;
+        --tl-colour-grey: #8a8a8a;
+        --tl-colour-bright: #ffc000;
+        --tl-colour-error: #ff6a6a;
+
+        /* Semantic variables */
+        --tl-colour-page: var(--tl-colour-black);
+        --tl-colour-surface: var(--tl-colour-off-black);
+        --tl-colour-border: var(--tl-colour-grey);
+
+        --tl-colour-text: var(--tl-colour-off-white);
+        --tl-colour-text-link: var(--tl-colour-inclusive);
+        --tl-colour-text-link-hover: var(--tl-colour-primary);
+
+        --tl-colour-highlight-focus: var(--tl-colour-bright);
+        --tl-colour-contrasting-focus: var(--tl-colour-black);
+
+        --tl-colour-accent: var(--tl-colour-ethical);
+      }
+
+      /* Box sizing */
+      html {
+        box-sizing: border-box;
+      }
+      *,
+      *::before,
+      *::after {
+        box-sizing: inherit;
+      }
+
+      /* Bare minimum styling */
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+        color: var(--tl-colour-text);
+        background-color: var(--tl-colour-page);
+      }
+
+      p {
+        max-inline-size: 60ch;
+      }
+
+      /* Utilities */
+      .visually-hidden {
+        position: absolute;
+        inline-size: 1px;
+        block-size: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        color: var(--tl-colour-black);
+        white-space: nowrap;
+        background-color: var(--tl-colour-white);
+        border: 0;
+        clip: rect(0, 0, 0, 0);
+      }
+    </style>
+    <style>
+      /* -------------------------------------------------------------------------- */
+      /* Breadcrumbs                                                                */
+      /* -------------------------------------------------------------------------- */
+
+      .tl-breadcrumbs {
+        --colour-link-text: var(--tl-colour-text-link, #7f238b);
+        --colour-link-text-current: var(--tl-colour-text, #222222);
+        --colour-link-accent-current: var(--tl-colour-accent, #cc0092);
+        --colour-link-text-hover: var(--tl-colour-text-link-hover, #7f238b);
+        --colour-background: var(--tl-colour-surface, #f0f0eb);
+        --colour-separator: var(--tl-colour-text, #222222);
+        --colour-focus-highlight: var(--tl-colour-highlight-focus, #7f238b);
+        --colour-focus-contrasting: var(--tl-colour-contrasting-focus, #ffffff);
+      }
+
+      nav.tl-breadcrumbs {
+        padding: 0.5rem;
+        background-color: var(--colour-background);
+      }
+
+      nav.tl-breadcrumbs ol {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0 1em;
+        padding: 0;
+        margin: 0;
+        list-style: none;
+      }
+
+      nav.tl-breadcrumbs li {
+        align-self: center;
+      }
+
+      nav.tl-breadcrumbs div {
+        display: flex;
+        align-items: center;
+      }
+
+      nav.tl-breadcrumbs div::before {
+        display: block;
+        flex-shrink: 0;
+        block-size: 0.8em;
+        margin-inline-end: 1rem;
+        color: var(--colour-separator);
+        content: "";
+        border-inline-end: 0.1em solid currentcolor;
+        transform: rotate(15deg);
+      }
+
+      nav.tl-breadcrumbs li:first-of-type div::before {
+        display: none;
+      }
+
+      nav.tl-breadcrumbs a {
+        display: inline-flex;
+        align-items: center;
+        align-self: center;
+        min-inline-size: 44px;
+        min-block-size: 44px;
+        color: var(--colour-link-text);
+      }
+
+      /* State styles */
+      nav.tl-breadcrumbs a:visited {
+        color: var(--colour-link-text);
+      }
+
+      nav.tl-breadcrumbs a[aria-current="page"] {
+        font-weight: bold;
+        color: var(--colour-link-text-current);
+        text-decoration-thickness: 0.2em;
+        text-decoration-color: var(--colour-link-accent-current);
+        text-underline-offset: 0.2em;
+      }
+
+      nav.tl-breadcrumbs a:focus-visible {
+        outline: 3px solid var(--colour-focus-highlight);
+        outline-offset: 3px;
+        box-shadow: 0 0 0 6px var(--colour-focus-contrasting);
+      }
+
+      nav.tl-breadcrumbs a:hover,
+      nav.tl-breadcrumbs a:visited:hover {
+        color: var(--colour-link-text-hover);
+      }
+    </style>
+  </head>
+
+  <body>
+    <main>
+      <nav class="tl-breadcrumbs" aria-label="Breadcrumb">
+        <ol>
+          <li>
+            <div>
+              <a href="/"> Home </a>
+            </div>
+          </li>
+
+          <li>
+            <div>
+              <a href="/about"> About </a>
+            </div>
+          </li>
+
+          <li>
+            <div>
+              <a href="/about/team" aria-current="page"> Team </a>
+            </div>
+          </li>
+        </ol>
+      </nav>
+    </main>
+
+    <script>
+      /* -------------------------------------------------------------------------- */
+      /* Boilerplate JS                                                             */
+      /* -------------------------------------------------------------------------- */
+
+      // Record the resolved colour scheme on <html>, so the stylesheet can switch its
+      // tokens. A page which sets data-user-color-scheme itself is left alone
+      const darkMode = window.matchMedia("(prefers-color-scheme: dark)");
+
+      function applyColourScheme() {
+        if (document.documentElement.hasAttribute("data-user-color-scheme"))
+          return;
+        document.documentElement.setAttribute(
+          "data-color-scheme-resolved",
+          darkMode.matches ? "dark" : "light",
+        );
+      }
+
+      darkMode.addEventListener("change", applyColourScheme);
+      applyColourScheme();
+    </script>
+  </body>
+</html>

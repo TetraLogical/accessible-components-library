@@ -1,0 +1,138 @@
+/* -------------------------------------------------------------------------- */
+/* Tabs                                                                       */
+/* -------------------------------------------------------------------------- */
+
+tl-tabs {
+  --colour-tab-selected-text: var(--tl-colour-primary, #420065);
+  --colour-tab-selected-background: var(--tl-colour-page, #ffffff);
+  --colour-tab-selected-highlight: var(--tl-colour-accent, #cc0092);
+  --colour-tab-unselected-text: var(--tl-colour-text, #222222);
+  --colour-tab-unselected-background: var(--tl-colour-surface, #f0f0eb);
+
+  --colour-panel-text: var(--tl-colour-text, #222222);
+  --colour-panel-background: var(--tl-colour-page, #ffffff);
+
+  --colour-link-text: var(--tl-colour-text-link, #7f238b);
+
+  --colour-border: var(--tl-colour-border, #666666);
+
+  --colour-focus-highlight: var(--tl-colour-highlight-focus, #ffc000);
+  --colour-focus-contrasting: var(--tl-colour-page, #ffffff);
+
+  --border-width: 1px;
+}
+
+tl-tabs {
+  display: block;
+}
+
+/* The row of tabs, shown when the element is wide enough */
+tl-tabs [role="tablist"] {
+  display: flex;
+  border-block-end: var(--border-width) solid var(--colour-border);
+}
+
+tl-tabs a[role="tab"] {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-content: center;
+  justify-content: center;
+  min-inline-size: 44px;
+  min-block-size: 44px;
+  padding: 0.5rem 1rem;
+  margin-block-end: calc(-1 * var(--border-width));
+  color: var(--colour-tab-unselected-text);
+  text-underline-offset: 0.2em;
+  background-color: var(--colour-tab-unselected-background);
+  border: var(--border-width) solid var(--colour-border);
+}
+
+tl-tabs a[role="tab"] + a[role="tab"] {
+  margin-inline-start: calc(-1 * var(--border-width));
+}
+
+tl-tabs a[aria-selected="true"] {
+  color: var(--colour-tab-selected-text);
+  text-decoration: none;
+  background-color: var(--colour-tab-selected-background);
+  border-block-start: none;
+  border-block-end: none;
+  box-shadow: inset 0 3px 0 0 var(--colour-tab-selected-highlight);
+}
+
+/* The accordion toggles, shown instead of the tabs when the element is narrow.
+   They match the triggers of the accordion component's one at a time variant */
+tl-tabs button.tl-tabs__toggle {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  inline-size: 100%;
+  min-inline-size: 44px;
+  min-block-size: 44px;
+  padding: 0.5rem 1rem;
+  margin-block-start: calc(-1 * var(--border-width));
+  font: inherit;
+  color: var(--colour-tab-unselected-text);
+  text-align: start;
+  cursor: pointer;
+  background-color: var(--colour-tab-unselected-background);
+  border: var(--border-width) solid var(--colour-border);
+}
+
+tl-tabs button.tl-tabs__toggle svg {
+  flex: none;
+  max-inline-size: 24px;
+  max-block-size: 24px;
+}
+
+tl-tabs button.tl-tabs__toggle[aria-expanded="true"] {
+  background-color: var(--colour-tab-selected-background);
+  border-block-start: none;
+  border-block-end: none;
+  box-shadow: inset 0 2px 0 0 var(--colour-tab-selected-highlight);
+}
+
+tl-tabs button.tl-tabs__toggle[aria-expanded="true"] svg {
+  transform: rotate(180deg);
+}
+
+/* Forced colours drop box shadows and background colours, which takes away the
+   accent stripe that marks the selected tab or the open section. Draw it as a
+   thicker top border instead, and give the open section a line above its content */
+@media (forced-colors: active) {
+  tl-tabs a[aria-selected="true"],
+  tl-tabs button.tl-tabs__toggle[aria-expanded="true"] {
+    border-block-start: 3px solid currentcolor;
+  }
+
+  tl-tabs button.tl-tabs__toggle[aria-expanded="true"] {
+    border-block-end: var(--border-width) solid currentcolor;
+  }
+}
+
+/* The content of a section, in either layout */
+tl-tabs .tl-tabs__panel {
+  padding: 1rem;
+  color: var(--colour-panel-text);
+  background-color: var(--colour-panel-background);
+  border: var(--border-width) solid var(--colour-border);
+  border-block-start: none;
+}
+
+/* Focus styles */
+tl-tabs button.tl-tabs__toggle:focus-visible,
+tl-tabs a[role="tab"]:focus-visible {
+  outline: 3px solid var(--colour-focus-contrasting);
+  box-shadow: inset 0 0 0 3px var(--colour-focus-highlight);
+}
+
+/* Demo content */
+a.demo-link {
+  color: var(--colour-link-text);
+}
+
+a.demo-link:focus-visible {
+  outline: 3px solid var(--colour-focus-highlight);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 6px var(--colour-focus-contrasting);
+}

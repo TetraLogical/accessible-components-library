@@ -1,0 +1,9 @@
+{
+  "lastUpdated": null,
+  "hasCSS": true,
+  "hasJS": true,
+  "variants": [
+    "default",
+    "with-heading"
+  ]
+}

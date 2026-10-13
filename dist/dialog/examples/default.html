@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dialog - Default</title>
+    <style>
+      /* -------------------------------------------------------------------------- */
+      /* Boilerplate CSS                                                            */
+      /* -------------------------------------------------------------------------- */
+
+      /* Tokens base */
+      :root {
+        --tl-colour-white: #ffffff;
+        --tl-colour-off-white: #f0f0eb;
+        --tl-colour-black: #222222;
+        --tl-colour-off-black: #333333;
+      }
+
+      /* Tokens light mode */
+      body,
+      [data-color-scheme-resolved="light"] body,
+      [data-user-color-scheme="light"] body {
+        /* Colour variables */
+        --tl-colour-primary: #420065;
+        --tl-colour-inclusive: #7f238b;
+        --tl-colour-ethical: #cc0092;
+        --tl-colour-sustainable: #ff1958;
+        --tl-colour-original: #e06500;
+
+        --tl-colour-grey: #666666;
+        --tl-colour-bright: #ffc000;
+        --tl-colour-error: #ca3535;
+
+        /* Semantic variables */
+        --tl-colour-page: var(--tl-colour-white);
+        --tl-colour-surface: var(--tl-colour-off-white);
+        --tl-colour-border: var(--tl-colour-grey);
+
+        --tl-colour-text: var(--tl-colour-off-black);
+        --tl-colour-text-link: var(--tl-colour-inclusive);
+        --tl-colour-text-link-hover: var(--tl-colour-primary);
+
+        --tl-colour-highlight-focus: var(--tl-colour-inclusive);
+        --tl-colour-contrasting-focus: var(--tl-colour-page);
+
+        --tl-colour-accent: var(--tl-colour-ethical);
+      }
+
+      /* Tokens dark mode */
+      [data-color-scheme-resolved="dark"] body,
+      [data-user-color-scheme="dark"] body {
+        /* Colour variables */
+        --tl-colour-primary: #e7d8ef;
+        --tl-colour-inclusive: #cc81d6;
+        --tl-colour-ethical: #ff0aba;
+        --tl-colour-sustainable: #ff386d;
+        --tl-colour-original: #f06c00;
+        --tl-colour-grey: #8a8a8a;
+        --tl-colour-bright: #ffc000;
+        --tl-colour-error: #ff6a6a;
+
+        /* Semantic variables */
+        --tl-colour-page: var(--tl-colour-black);
+        --tl-colour-surface: var(--tl-colour-off-black);
+        --tl-colour-border: var(--tl-colour-grey);
+
+        --tl-colour-text: var(--tl-colour-off-white);
+        --tl-colour-text-link: var(--tl-colour-inclusive);
+        --tl-colour-text-link-hover: var(--tl-colour-primary);
+
+        --tl-colour-highlight-focus: var(--tl-colour-bright);
+        --tl-colour-contrasting-focus: var(--tl-colour-black);
+
+        --tl-colour-accent: var(--tl-colour-ethical);
+      }
+
+      /* Box sizing */
+      html {
+        box-sizing: border-box;
+      }
+      *,
+      *::before,
+      *::after {
+        box-sizing: inherit;
+      }
+
+      /* Bare minimum styling */
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+        color: var(--tl-colour-text);
+        background-color: var(--tl-colour-page);
+      }
+
+      p {
+        max-inline-size: 60ch;
+      }
+
+      /* Utilities */
+      .visually-hidden {
+        position: absolute;
+        inline-size: 1px;
+        block-size: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        color: var(--tl-colour-black);
+        white-space: nowrap;
+        background-color: var(--tl-colour-white);
+        border: 0;
+        clip: rect(0, 0, 0, 0);
+      }
+    </style>
+    <style>
+      /* -------------------------------------------------------------------------- */
+      /* Dialog                                                                     */
+      /* -------------------------------------------------------------------------- */
+
+      /* Tokens are declared on the dialog and on the controls which sit outside it */
+      .tl-dialog,
+      .tl-dialog__button,
+      .tl-dialog__close {
+        --colour-dialog-text: var(--tl-colour-text, #333333);
+        --colour-dialog-background: var(--tl-colour-page, #ffffff);
+        --colour-dialog-border: var(--tl-colour-border, #666666);
+
+        --colour-button-text: var(--tl-colour-text, #333333);
+        --colour-button-background: var(--tl-colour-surface, #f0f0eb);
+        --colour-button-border: var(--tl-colour-border, #666666);
+        --colour-button-destructive-border: var(--tl-colour-error, #ca3535);
+
+        --colour-focus-highlight: var(--tl-colour-highlight-focus, #7f238b);
+        --colour-focus-contrasting: var(--tl-colour-page, #ffffff);
+
+        --border-width: 2px;
+      }
+
+      /* The dialog surface, shared by the modal and non-modal variants */
+      .tl-dialog {
+        max-inline-size: min(35rem, calc(100vw - 2rem));
+        padding: 1.5rem;
+        color: var(--colour-dialog-text);
+        background-color: var(--colour-dialog-background);
+        border: var(--border-width) solid var(--colour-dialog-border);
+      }
+
+      /* Dim the page behind a modal dialog */
+      .tl-dialog::backdrop {
+        background-color: rgb(0 0 0 / 60%);
+      }
+
+      /* The browser makes the page behind a modal dialog inert, but still lets it
+   scroll, so lock it in place until the dialog is dismissed */
+      html:has(.tl-dialog:modal) {
+        overflow: hidden;
+      }
+
+      /* A non-modal dialog is open in the markup, so that it can be read without the
+   script. The browser would position it absolutely and centre it, so until the
+   script has taken over it is made a plain block in the flow of the page */
+      .tl-dialog--non-modal:not([data-enhanced]) {
+        position: static;
+        inline-size: auto;
+        margin: 0;
+      }
+
+      /* Once the script has closed the non-modal dialog and given it a data-enhanced
+   attribute, it sits out of the way in the corner of the page */
+      .tl-dialog--non-modal[data-enhanced] {
+        position: fixed;
+        inset-block: auto 1rem;
+        inset-inline: auto 1rem;
+        margin: 0;
+      }
+
+      /* When a non-modal dialog completely covers the element which has keyboard
+   focus, the script gives it a data-focus-behind attribute and a
+   --dialog-focus-offset custom property. The offset moves the dialog along
+   from the inline start of the viewport, so that it begins just past the
+   focused element and the focus indicator can be seen.
+
+   The dialog keeps its size and is allowed to run off the edge of the viewport.
+   In this moment, uncovering the focus indicator matters more than keeping the 
+   whole dialog in view, and at narrow widths there is nowhere else for it to go. 
+   Sizing it to max-content keeps it the width it already was; otherwise it would 
+   shrink to fit the space left between the offset and the edge of the viewport, 
+   and grow much taller. */
+      .tl-dialog--non-modal[data-focus-behind] {
+        inset-inline: var(--dialog-focus-offset, auto) auto;
+        inline-size: max-content;
+      }
+
+      /* The dialog itself is focused when it opens, so it needs no indicator of its own */
+      .tl-dialog:focus-visible {
+        outline: none;
+      }
+
+      .tl-dialog h2 {
+        margin-block: 0 1rem;
+      }
+
+      /* The close button comes last in the markup, so people reach the content before
+   it and it is the last control before leaving the dialog. It still sits in the
+   top corner, where people expect to find it, with the heading kept clear of it */
+      .tl-dialog__close {
+        position: absolute;
+        inset-block-start: 1.5rem;
+        inset-inline-end: 1.5rem;
+      }
+
+      .tl-dialog:has(.tl-dialog__close:not([hidden])) h2 {
+        padding-inline-end: calc(44px + 1rem);
+      }
+
+      /* Row of buttons which dismiss the dialog */
+      .tl-dialog__actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-block-start: 1.5rem;
+      }
+
+      /* Controls which open and dismiss the dialog */
+      .tl-dialog__button,
+      .tl-dialog__close {
+        display: inline-flex;
+        flex: none;
+        align-items: center;
+        justify-content: center;
+        min-inline-size: 44px;
+        min-block-size: 44px;
+        padding: 0.5rem 1rem;
+        font: inherit;
+        color: var(--colour-button-text);
+        cursor: pointer;
+        background-color: var(--colour-button-background);
+        border: var(--border-width) solid var(--colour-button-border);
+      }
+
+      /* Hidden controls stay hidden, whatever display value is set above */
+      .tl-dialog__button[hidden],
+      .tl-dialog__close[hidden] {
+        display: none;
+      }
+
+      /* Destructive actions are marked out with the error colour */
+      .tl-dialog__button--destructive {
+        border-color: var(--colour-button-destructive-border);
+      }
+
+      /* The icon-only close button is square, so it needs no horizontal padding */
+      .tl-dialog__close {
+        padding: 0.5rem;
+      }
+
+      .tl-dialog__close svg {
+        inline-size: 24px;
+        block-size: 24px;
+      }
+
+      /* Focus styles, which stay visible against light and dark backgrounds */
+      .tl-dialog__button:focus-visible,
+      .tl-dialog__close:focus-visible {
+        outline: 3px solid var(--colour-focus-contrasting);
+        box-shadow: inset 0 0 0 3px var(--colour-focus-highlight);
+      }
+
+      /* Demo content. The link sits outside the dialog, so it uses the page tokens */
+      a.demo-link {
+        color: var(--tl-colour-text-link);
+      }
+
+      a.demo-link:focus-visible {
+        outline: 3px solid var(--tl-colour-highlight-focus);
+        outline-offset: 3px;
+        box-shadow: 0 0 0 6px var(--tl-colour-page);
+      }
+    </style>
+  </head>
+
+  <body>
+    <main>
+      <h1>Dialog</h1>
+
+      <p>
+        A modal dialog blocks interaction with the rest of the page. This
+        paragraph contains a focusable link to
+        <a class="demo-link" href="https://tetralogical.com"
+          >the TetraLogical website</a
+        >
+        for demo purposes, to show that it becomes inert and is not focusable
+        while the dialog is open.
+      </p>
+
+      <button
+        type="button"
+        id="dialog-trigger"
+        class="tl-dialog__button"
+        command="show-modal"
+        commandfor="dialog-modal"
+      >
+        Open modal
+      </button>
+
+      <dialog
+        id="dialog-modal"
+        class="tl-dialog"
+        tabindex="-1"
+        aria-modal="true"
+        aria-labelledby="dialog-modal-heading"
+      >
+        <h2 id="dialog-modal-heading">Do you want to delete your account?</h2>
+
+        <p>This is a demo. No data will actually be deleted.</p>
+
+        <div class="tl-dialog__actions">
+          <button
+            type="button"
+            id="dialog-cancel"
+            class="tl-dialog__button"
+            command="close"
+            commandfor="dialog-modal"
+          >
+            No
+          </button>
+
+          <button
+            type="button"
+            id="dialog-confirm"
+            class="tl-dialog__button tl-dialog__button--destructive"
+            command="close"
+            commandfor="dialog-modal"
+          >
+            Yes
+          </button>
+        </div>
+      </dialog>
+    </main>
+
+    <script>
+      /* -------------------------------------------------------------------------- */
+      /* Boilerplate JS                                                             */
+      /* -------------------------------------------------------------------------- */
+
+      // Record the resolved colour scheme on <html>, so the stylesheet can switch its
+      // tokens. A page which sets data-user-color-scheme itself is left alone
+      const darkMode = window.matchMedia("(prefers-color-scheme: dark)");
+
+      function applyColourScheme() {
+        if (document.documentElement.hasAttribute("data-user-color-scheme"))
+          return;
+        document.documentElement.setAttribute(
+          "data-color-scheme-resolved",
+          darkMode.matches ? "dark" : "light",
+        );
+      }
+
+      darkMode.addEventListener("change", applyColourScheme);
+      applyColourScheme();
+    </script>
+    <script>
+      /**
+       * Dialog
+       *
+       * Built on the native <dialog> element. Controls point at their dialog with
+       * commandfor and say what they do with command: "show-modal" opens a modal,
+       * which makes the rest of the page inert and keeps keyboard focus inside the
+       * dialog, "--show" opens a non-modal dialog which leaves the page interactive,
+       * and "close" closes either. A modal dialog is also marked aria-modal="true".
+       *
+       * Browsers which support invoker commands handle "show-modal" and "close"
+       * themselves, so a modal works without this script. "--show" is a custom
+       * command with no native behaviour, so a non-modal dialog is open in the
+       * markup with its controls hidden: without the script it reads as a block of
+       * content where it sits in the page. This script closes it, reveals its
+       * controls and handles every command itself, so that the behaviour is the
+       * same in every browser.
+       *
+       * A non-modal dialog sits over the page, so it can hide the focus indicator of
+       * whatever the user tabs to behind it. While that is the case the dialog is
+       * given a data-focus-behind attribute and a --dialog-focus-offset custom
+       * property, which the stylesheet uses to move it clear.
+       */
+
+      // The focus indicator is drawn this far outside an element's box, so a dialog
+      // has to cover that much beyond the element before the indicator is hidden
+      const FOCUS_RING_ALLOWANCE = 6;
+
+      // Elements which can take keyboard focus, before checking whether they are
+      // disabled, hidden or taken out of the tab order
+      const FOCUSABLE =
+        'a[href], button, input, select, textarea, summary, iframe, audio[controls], video[controls], [contenteditable="true"], [tabindex]';
+
+      // The control which opened each dialog, so focus can go back to it on close
+      const openedBy = new WeakMap();
+
+      function isModal(dialog) {
+        return dialog.getAttribute("aria-modal") === "true";
+      }
+
+      // The elements inside the dialog which are in the tab order, in DOM order
+      function tabbableElements(dialog) {
+        return [...dialog.querySelectorAll(FOCUSABLE)].filter(
+          (element) =>
+            element.tabIndex >= 0 &&
+            !element.matches(":disabled") &&
+            element.getClientRects().length > 0,
+        );
+      }
+
+      // The browser makes the page behind a modal dialog inert, but still lets Tab
+      // carry focus out of the dialog to its own toolbar. Wrap it round instead, so
+      // that focus stays inside the dialog until it is dismissed
+      function containFocus(dialog, event) {
+        if (event.key !== "Tab") return;
+
+        const tabbable = tabbableElements(dialog);
+        const active = document.activeElement;
+
+        // With nothing inside to move to, focus stays on the dialog itself
+        if (!tabbable.length) {
+          event.preventDefault();
+          dialog.focus();
+          return;
+        }
+
+        const first = tabbable[0];
+        const last = tabbable[tabbable.length - 1];
+
+        if (event.shiftKey && (active === first || active === dialog)) {
+          // Shift+Tab from the first control, or from the dialog itself, wraps to the last
+          event.preventDefault();
+          last.focus();
+        } else if (!event.shiftKey && active === last) {
+          // Tab from the last control wraps to the first
+          event.preventDefault();
+          first.focus();
+        }
+      }
+
+      // Whether the dialog completely hides the focus indicator of an element behind it
+      function completelyCovers(dialog, element) {
+        if (!element || dialog.contains(element)) return false;
+        // Only keyboard focus draws an indicator
+        if (!element.matches(":focus-visible")) return false;
+
+        const target = element.getBoundingClientRect();
+        if (!target.width || !target.height) return false;
+
+        // Measure the dialog in its resting position. A dialog which has already
+        // moved aside covers nothing, so measuring it where it stands would send it
+        // straight back on the next scroll, and aside again on the one after that
+        const moved = dialog.hasAttribute("data-focus-behind");
+        if (moved) dialog.removeAttribute("data-focus-behind");
+
+        try {
+          const cover = dialog.getBoundingClientRect();
+          const covered =
+            cover.top <= target.top - FOCUS_RING_ALLOWANCE &&
+            cover.bottom >= target.bottom + FOCUS_RING_ALLOWANCE &&
+            cover.left <= target.left - FOCUS_RING_ALLOWANCE &&
+            cover.right >= target.right + FOCUS_RING_ALLOWANCE;
+          if (!covered) return false;
+
+          // The boxes overlap, but the dialog also has to be painted on top
+          const x = (target.left + target.right) / 2;
+          const y = (target.top + target.bottom) / 2;
+          return dialog.contains(document.elementFromPoint(x, y));
+        } finally {
+          if (moved) dialog.setAttribute("data-focus-behind", "");
+        }
+      }
+
+      // Move the dialog so that it starts just past the far edge of the element,
+      // leaving room for the focus indicator. The offset is an inline-start inset,
+      // so in a right-to-left dialog it is measured from the right of the viewport
+      function moveAside(dialog, element) {
+        const target = element.getBoundingClientRect();
+        const rightToLeft = getComputedStyle(dialog).direction === "rtl";
+        const offset = rightToLeft
+          ? document.documentElement.clientWidth -
+            target.left +
+            FOCUS_RING_ALLOWANCE
+          : target.right + FOCUS_RING_ALLOWANCE;
+
+        dialog.style.setProperty("--dialog-focus-offset", `${offset}px`);
+        dialog.setAttribute("data-focus-behind", "");
+      }
+
+      function moveBack(dialog) {
+        dialog.style.removeProperty("--dialog-focus-offset");
+        dialog.removeAttribute("data-focus-behind");
+      }
+
+      // Keep a non-modal dialog clear of the focused element as focus moves, the page
+      // scrolls or resizes, and the dialog opens and closes
+      function keepClearOfFocus(dialog) {
+        function update() {
+          if (dialog.open && completelyCovers(dialog, document.activeElement)) {
+            moveAside(dialog, document.activeElement);
+          } else {
+            moveBack(dialog);
+          }
+        }
+
+        document.addEventListener("focusin", update);
+        document.addEventListener("focusout", update);
+        // Scroll events do not bubble, so listen during the capture phase to catch
+        // scrolling inside any element on the page
+        document.addEventListener("scroll", update, true);
+        window.addEventListener("resize", update);
+        new MutationObserver(update).observe(dialog, {
+          attributeFilter: ["open"],
+        });
+      }
+
+      document.querySelectorAll("[commandfor]").forEach((control) => {
+        const dialog = document.getElementById(
+          control.getAttribute("commandfor"),
+        );
+        const command = control.getAttribute("command");
+        if (!dialog || dialog.tagName !== "DIALOG") return;
+        if (!["show-modal", "--show", "close"].includes(command)) return;
+
+        control.addEventListener("click", (event) => {
+          // Cancelling the click stops the browser running the command as well
+          event.preventDefault();
+
+          if (command === "close") {
+            dialog.close();
+            return;
+          }
+
+          openedBy.set(dialog, control);
+
+          if (command === "show-modal") {
+            dialog.showModal();
+          } else {
+            dialog.show();
+          }
+
+          // Focus the dialog itself, so that its name and content are announced
+          dialog.focus();
+        });
+      });
+
+      document.querySelectorAll("dialog").forEach((dialog) => {
+        // Collapse a non-modal dialog which was open in the markup, and mark it so the
+        // stylesheet can float it. The modal variant is closed in the markup already
+        if (!isModal(dialog)) {
+          if (dialog.open) dialog.close();
+          dialog.setAttribute("data-enhanced", "");
+        }
+
+        // Reveal the controls which were hidden until there was a script to run them
+        if (dialog.id) {
+          document
+            .querySelectorAll(`[commandfor="${CSS.escape(dialog.id)}"]`)
+            .forEach((control) => {
+              control.hidden = false;
+            });
+        }
+
+        // Return focus to the control which opened the dialog, however it was closed
+        dialog.addEventListener("close", () => {
+          const trigger = openedBy.get(dialog);
+          if (trigger) trigger.focus();
+        });
+
+        if (isModal(dialog)) {
+          dialog.addEventListener("keydown", (event) =>
+            containFocus(dialog, event),
+          );
+          return;
+        }
+
+        // The browser closes a modal dialog on Esc, but a non-modal one needs a hand
+        dialog.addEventListener("keydown", (event) => {
+          if (event.key !== "Escape") return;
+          event.preventDefault();
+          dialog.close();
+        });
+
+        keepClearOfFocus(dialog);
+      });
+    </script>
+  </body>
+</html>

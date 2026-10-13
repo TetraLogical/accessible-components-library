@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Disclosure - Default</title>
+    <style>
+      /* -------------------------------------------------------------------------- */
+      /* Boilerplate CSS                                                            */
+      /* -------------------------------------------------------------------------- */
+
+      /* Tokens base */
+      :root {
+        --tl-colour-white: #ffffff;
+        --tl-colour-off-white: #f0f0eb;
+        --tl-colour-black: #222222;
+        --tl-colour-off-black: #333333;
+      }
+
+      /* Tokens light mode */
+      body,
+      [data-color-scheme-resolved="light"] body,
+      [data-user-color-scheme="light"] body {
+        /* Colour variables */
+        --tl-colour-primary: #420065;
+        --tl-colour-inclusive: #7f238b;
+        --tl-colour-ethical: #cc0092;
+        --tl-colour-sustainable: #ff1958;
+        --tl-colour-original: #e06500;
+
+        --tl-colour-grey: #666666;
+        --tl-colour-bright: #ffc000;
+        --tl-colour-error: #ca3535;
+
+        /* Semantic variables */
+        --tl-colour-page: var(--tl-colour-white);
+        --tl-colour-surface: var(--tl-colour-off-white);
+        --tl-colour-border: var(--tl-colour-grey);
+
+        --tl-colour-text: var(--tl-colour-off-black);
+        --tl-colour-text-link: var(--tl-colour-inclusive);
+        --tl-colour-text-link-hover: var(--tl-colour-primary);
+
+        --tl-colour-highlight-focus: var(--tl-colour-inclusive);
+        --tl-colour-contrasting-focus: var(--tl-colour-page);
+
+        --tl-colour-accent: var(--tl-colour-ethical);
+      }
+
+      /* Tokens dark mode */
+      [data-color-scheme-resolved="dark"] body,
+      [data-user-color-scheme="dark"] body {
+        /* Colour variables */
+        --tl-colour-primary: #e7d8ef;
+        --tl-colour-inclusive: #cc81d6;
+        --tl-colour-ethical: #ff0aba;
+        --tl-colour-sustainable: #ff386d;
+        --tl-colour-original: #f06c00;
+        --tl-colour-grey: #8a8a8a;
+        --tl-colour-bright: #ffc000;
+        --tl-colour-error: #ff6a6a;
+
+        /* Semantic variables */
+        --tl-colour-page: var(--tl-colour-black);
+        --tl-colour-surface: var(--tl-colour-off-black);
+        --tl-colour-border: var(--tl-colour-grey);
+
+        --tl-colour-text: var(--tl-colour-off-white);
+        --tl-colour-text-link: var(--tl-colour-inclusive);
+        --tl-colour-text-link-hover: var(--tl-colour-primary);
+
+        --tl-colour-highlight-focus: var(--tl-colour-bright);
+        --tl-colour-contrasting-focus: var(--tl-colour-black);
+
+        --tl-colour-accent: var(--tl-colour-ethical);
+      }
+
+      /* Box sizing */
+      html {
+        box-sizing: border-box;
+      }
+      *,
+      *::before,
+      *::after {
+        box-sizing: inherit;
+      }
+
+      /* Bare minimum styling */
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+        color: var(--tl-colour-text);
+        background-color: var(--tl-colour-page);
+      }
+
+      p {
+        max-inline-size: 60ch;
+      }
+
+      /* Utilities */
+      .visually-hidden {
+        position: absolute;
+        inline-size: 1px;
+        block-size: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        color: var(--tl-colour-black);
+        white-space: nowrap;
+        background-color: var(--tl-colour-white);
+        border: 0;
+        clip: rect(0, 0, 0, 0);
+      }
+    </style>
+    <style>
+      /* -------------------------------------------------------------------------- */
+      /* Disclosure                                                                 */
+      /* -------------------------------------------------------------------------- */
+
+      .tl-disclosure {
+        --colour-trigger-text: var(--tl-colour-text-link, #7f238b);
+        --colour-trigger-text-hover: var(--tl-colour-text-link-hover, #420065);
+
+        --colour-content-text: var(--tl-colour-text, #222222);
+
+        --colour-link-text: var(--tl-colour-text-link, #7f238b);
+
+        --colour-border: var(--tl-colour-border, #666666);
+
+        --colour-focus-highlight: var(--tl-colour-highlight-focus, #ffc000);
+        --colour-focus-contrasting: var(--tl-colour-page, #ffffff);
+
+        /* The measurements the content's border is lined up against */
+        --trigger-padding-inline: 0.5rem;
+        --icon-size: 24px;
+        --icon-gap: 0.5rem;
+        --border-width: 4px;
+      }
+
+      .tl-disclosure {
+        max-inline-size: 60ch;
+      }
+
+      /* The summary before the script runs, and the button it is
+   rebuilt into, which may use a heading */
+      .tl-disclosure > summary,
+      .tl-disclosure > button,
+      .tl-disclosure > :is(h1, h2, h3, h4, h5, h6) > button {
+        display: flex;
+        gap: var(--icon-gap);
+        align-items: center;
+        inline-size: 100%;
+        min-inline-size: 44px;
+        min-block-size: 44px;
+        padding: 0.5rem var(--trigger-padding-inline);
+        margin: 0;
+        font: inherit;
+        color: var(--colour-trigger-text);
+        text-align: start;
+        background: none;
+        border: none;
+      }
+
+      /* Before the script runs, a plain triangle stands in for the chevron. It is
+   text, so it keeps the trigger colour and survives Windows contrast themes,
+   it sits in the same space as the chevron so the content lines up the
+   same way. The browser's own marker is removed, as it only shows while the
+   summary is a list item, and that would leave its label out of alignment */
+      .tl-disclosure > summary {
+        box-sizing: border-box;
+        cursor: pointer;
+        list-style: none;
+      }
+
+      .tl-disclosure > summary::-webkit-details-marker {
+        display: none;
+      }
+
+      /* The triangle is decorative, so it is given empty alternative text to keep it
+   out of the summary's accessible name, or screen readers announce it. The
+   plain value before it is for browsers which do not understand the
+   alternative text form, and would otherwise show nothing */
+      .tl-disclosure > summary::before {
+        flex: none;
+        inline-size: var(--icon-size);
+        font-size: 1.2rem;
+        text-align: center;
+        content: "\25B8";
+        content: "\25B8" / "";
+      }
+
+      .tl-disclosure[open] > summary::before {
+        content: "\25BE";
+        content: "\25BE" / "";
+      }
+
+      /* A heading keeps its semantics but takes the trigger's size, so a disclosure
+   looks the same with or without one */
+      .tl-disclosure > summary > :is(h1, h2, h3, h4, h5, h6),
+      .tl-disclosure > :is(h1, h2, h3, h4, h5, h6) {
+        margin: 0;
+        font: inherit;
+      }
+
+      .tl-disclosure button {
+        cursor: pointer;
+      }
+
+      .tl-disclosure > summary:hover,
+      .tl-disclosure button:hover {
+        color: var(--colour-trigger-text-hover);
+      }
+
+      .tl-disclosure button svg {
+        flex: none;
+        inline-size: var(--icon-size);
+        block-size: var(--icon-size);
+      }
+
+      /* The content, which expands and collapses. Its border runs from the centre of
+   the chevron, and its text lines up with the label, so it is clear which
+   trigger the content belongs to */
+      .tl-disclosure > div {
+        padding-block: 0.5rem;
+        padding-inline-start: calc(
+          var(--icon-size) / 2 + var(--icon-gap) - var(--border-width) / 2
+        );
+        margin-inline-start: calc(
+          var(--trigger-padding-inline) + var(--icon-size) / 2 -
+            var(--border-width) / 2
+        );
+        color: var(--colour-content-text);
+        border-inline-start: var(--border-width) solid var(--colour-border);
+      }
+
+      .tl-disclosure > div > :first-child {
+        margin-block-start: 0;
+      }
+
+      .tl-disclosure > div > :last-child {
+        margin-block-end: 0;
+      }
+
+      /* While collapsed, the content is hidden until found, so the browser can still
+   reveal it for find-in-page and for links to anchors inside it. The element
+   keeps its box in that state, so its padding and border come off, or they
+   would show as a stub under the trigger. In print every panel is shown, so
+   the box is left alone there */
+      @media screen {
+        .tl-disclosure > div[hidden] {
+          padding-block: 0;
+          border-inline-start-width: 0;
+        }
+      }
+
+      /* State styles: the chevron points down while collapsed, and up while expanded */
+      .tl-disclosure button[aria-expanded="true"] svg {
+        transform: rotate(180deg);
+      }
+
+      /* Focus styles */
+      .tl-disclosure > summary:focus-visible,
+      .tl-disclosure button:focus-visible {
+        outline: 3px solid var(--colour-focus-contrasting);
+        box-shadow: inset 0 0 0 3px var(--colour-focus-highlight);
+      }
+
+      /* Under a Windows contrast theme, Firefox colours a hovered button with the
+   theme's selected item text colour and expects the selected item background
+   behind it, but it keeps the transparent background above, so the text lands
+   on the page background instead and fails contrast requirements. The fix is
+   to keep the text in the button colour. */
+      @media (forced-colors: active) {
+        .tl-disclosure button:hover {
+          color: ButtonText;
+        }
+      }
+
+      /* On paper there is nothing to press, so every panel is shown. The chevron
+   would point the wrong way for a panel shown while collapsed, so it is left
+   blank. It keeps its space, so the content's border still lines up with the
+   label. The display value is for browsers which treat hidden="until-found"
+   as plain hidden */
+      @media print {
+        .tl-disclosure > div[hidden] {
+          display: block;
+          content-visibility: visible;
+        }
+
+        .tl-disclosure button svg,
+        .tl-disclosure > summary::before {
+          visibility: hidden;
+        }
+
+        /* Without the script, the content is still inside a native <details>, which
+     browsers with the ::details-content pseudo-element can be made to print */
+        .tl-disclosure:not([open])::details-content {
+          content-visibility: visible;
+        }
+      }
+
+      /* Demo content */
+      a.demo-link {
+        color: var(--colour-link-text);
+      }
+
+      a.demo-link:focus-visible {
+        outline: 3px solid var(--colour-focus-highlight);
+        outline-offset: 3px;
+        box-shadow: 0 0 0 6px var(--colour-focus-contrasting);
+      }
+    </style>
+  </head>
+
+  <body>
+    <main>
+      <details class="tl-disclosure">
+        <summary>World Wide Web Consortium</summary>
+
+        <div id="disclosure-content">
+          <p>
+            We're members of the W3C, with Léonie Watson elected to the first
+            W3C Board of Directors. A number of the TetraLogical team contribute
+            to standards like the Web Content Accessibility Guidelines (WCAG)
+            and Accessible Rich Internet Applications (ARIA).
+          </p>
+        </div>
+      </details>
+    </main>
+
+    <script>
+      /* -------------------------------------------------------------------------- */
+      /* Boilerplate JS                                                             */
+      /* -------------------------------------------------------------------------- */
+
+      // Record the resolved colour scheme on <html>, so the stylesheet can switch its
+      // tokens. A page which sets data-user-color-scheme itself is left alone
+      const darkMode = window.matchMedia("(prefers-color-scheme: dark)");
+
+      function applyColourScheme() {
+        if (document.documentElement.hasAttribute("data-user-color-scheme"))
+          return;
+        document.documentElement.setAttribute(
+          "data-color-scheme-resolved",
+          darkMode.matches ? "dark" : "light",
+        );
+      }
+
+      darkMode.addEventListener("change", applyColourScheme);
+      applyColourScheme();
+    </script>
+    <script>
+      /**
+       * Disclosure
+       *
+       * The markup is a native <details> element, so it works in every browser
+       * without this script. The script rebuilds it as a <button> which controls a
+       * block of content, for two reasons: browsers and screen readers expose a
+       * <summary> less consistently than a <button>, and some do not expose a
+       * heading placed inside a <summary>: TalkBack still does not, and older
+       * versions of Safari did not. Once rebuilt, the heading is kept with the
+       * button inside it, so it stays a heading everywhere.
+       *
+       * Collapsed content is hidden with hidden="until-found", so the browser can
+       * still reach it with find-in-page and with links to anchors inside it. When
+       * it does, it reveals the content itself and fires a beforematch event first,
+       * which the script uses to keep the button's state in step. Browsers without
+       * support treat the attribute as plain hidden.
+       *
+       * For several disclosures which work together, use the Accordion component.
+       */
+
+      // The chevron before the label, which the stylesheet turns when the content is expanded
+      const CHEVRON =
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m4 8 8 8 8-8" /></svg>';
+
+      const HEADING = "h1, h2, h3, h4, h5, h6";
+
+      // Gives each content block without an id a unique one for aria-controls to point at
+      let instanceCount = 0;
+
+      // The element a link to an anchor on this page points at, when the page was opened at one
+      const anchor = location.hash
+        ? document.getElementById(decodeURIComponent(location.hash.slice(1)))
+        : null;
+
+      function setExpanded(trigger, content, expanded) {
+        trigger.setAttribute("aria-expanded", expanded ? "true" : "false");
+
+        if (expanded) {
+          content.removeAttribute("hidden");
+        } else {
+          content.setAttribute("hidden", "until-found");
+        }
+      }
+
+      document.querySelectorAll("details.tl-disclosure").forEach((details) => {
+        const summary = details.querySelector(":scope > summary");
+        if (!summary) return;
+
+        // The label is the summary's content, or its heading's content when it holds one
+        const heading =
+          summary.children.length === 1 &&
+          summary.firstElementChild.matches(HEADING)
+            ? summary.firstElementChild
+            : null;
+
+        const trigger = document.createElement("button");
+        trigger.type = "button";
+        trigger.innerHTML = CHEVRON;
+        trigger.append(...(heading ?? summary).childNodes);
+
+        // The content is everything after the summary. When that is a single <div>
+        // it is kept as the wrapper, so that its id and anything styled against it
+        // survive. Otherwise the content is moved into a new one
+        const siblings = [...details.children].filter(
+          (child) => child !== summary,
+        );
+        const hasWrapper =
+          siblings.length === 1 && siblings[0].tagName === "DIV";
+        const content = hasWrapper
+          ? siblings[0]
+          : document.createElement("div");
+
+        if (!hasWrapper) {
+          content.append(
+            ...[...details.childNodes].filter((node) => node !== summary),
+          );
+        }
+
+        if (!content.id) content.id = `disclosure-${++instanceCount}-content`;
+        trigger.setAttribute("aria-controls", content.id);
+
+        const disclosure = document.createElement("div");
+        disclosure.className = details.className;
+        if (details.id) disclosure.id = details.id;
+
+        if (heading) {
+          heading.replaceChildren(trigger);
+          disclosure.append(heading, content);
+        } else {
+          disclosure.append(trigger, content);
+        }
+
+        // A <details open> starts expanded, as it would without the script, and so
+        // does one holding the anchor the page was opened at
+        setExpanded(trigger, content, details.open || content.contains(anchor));
+
+        trigger.addEventListener("click", () => {
+          const expanded = trigger.getAttribute("aria-expanded") === "true";
+          setExpanded(trigger, content, !expanded);
+        });
+
+        // The browser reveals the content itself when find-in-page or a link to an
+        // anchor inside it finds a match, and says so first
+        content.addEventListener("beforematch", () =>
+          setExpanded(trigger, content, true),
+        );
+
+        details.replaceWith(disclosure);
+      });
+    </script>
+  </body>
+</html>

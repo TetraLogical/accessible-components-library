@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pagination - Few pages</title>
+    <style>
+      /* -------------------------------------------------------------------------- */
+      /* Boilerplate CSS                                                            */
+      /* -------------------------------------------------------------------------- */
+
+      /* Tokens base */
+      :root {
+        --tl-colour-white: #ffffff;
+        --tl-colour-off-white: #f0f0eb;
+        --tl-colour-black: #222222;
+        --tl-colour-off-black: #333333;
+      }
+
+      /* Tokens light mode */
+      body,
+      [data-color-scheme-resolved="light"] body,
+      [data-user-color-scheme="light"] body {
+        /* Colour variables */
+        --tl-colour-primary: #420065;
+        --tl-colour-inclusive: #7f238b;
+        --tl-colour-ethical: #cc0092;
+        --tl-colour-sustainable: #ff1958;
+        --tl-colour-original: #e06500;
+
+        --tl-colour-grey: #666666;
+        --tl-colour-bright: #ffc000;
+        --tl-colour-error: #ca3535;
+
+        /* Semantic variables */
+        --tl-colour-page: var(--tl-colour-white);
+        --tl-colour-surface: var(--tl-colour-off-white);
+        --tl-colour-border: var(--tl-colour-grey);
+
+        --tl-colour-text: var(--tl-colour-off-black);
+        --tl-colour-text-link: var(--tl-colour-inclusive);
+        --tl-colour-text-link-hover: var(--tl-colour-primary);
+
+        --tl-colour-highlight-focus: var(--tl-colour-inclusive);
+        --tl-colour-contrasting-focus: var(--tl-colour-page);
+
+        --tl-colour-accent: var(--tl-colour-ethical);
+      }
+
+      /* Tokens dark mode */
+      [data-color-scheme-resolved="dark"] body,
+      [data-user-color-scheme="dark"] body {
+        /* Colour variables */
+        --tl-colour-primary: #e7d8ef;
+        --tl-colour-inclusive: #cc81d6;
+        --tl-colour-ethical: #ff0aba;
+        --tl-colour-sustainable: #ff386d;
+        --tl-colour-original: #f06c00;
+        --tl-colour-grey: #8a8a8a;
+        --tl-colour-bright: #ffc000;
+        --tl-colour-error: #ff6a6a;
+
+        /* Semantic variables */
+        --tl-colour-page: var(--tl-colour-black);
+        --tl-colour-surface: var(--tl-colour-off-black);
+        --tl-colour-border: var(--tl-colour-grey);
+
+        --tl-colour-text: var(--tl-colour-off-white);
+        --tl-colour-text-link: var(--tl-colour-inclusive);
+        --tl-colour-text-link-hover: var(--tl-colour-primary);
+
+        --tl-colour-highlight-focus: var(--tl-colour-bright);
+        --tl-colour-contrasting-focus: var(--tl-colour-black);
+
+        --tl-colour-accent: var(--tl-colour-ethical);
+      }
+
+      /* Box sizing */
+      html {
+        box-sizing: border-box;
+      }
+      *,
+      *::before,
+      *::after {
+        box-sizing: inherit;
+      }
+
+      /* Bare minimum styling */
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+        color: var(--tl-colour-text);
+        background-color: var(--tl-colour-page);
+      }
+
+      p {
+        max-inline-size: 60ch;
+      }
+
+      /* Utilities */
+      .visually-hidden {
+        position: absolute;
+        inline-size: 1px;
+        block-size: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        color: var(--tl-colour-black);
+        white-space: nowrap;
+        background-color: var(--tl-colour-white);
+        border: 0;
+        clip: rect(0, 0, 0, 0);
+      }
+    </style>
+    <style>
+      /* -------------------------------------------------------------------------- */
+      /* Pagination                                                                 */
+      /* -------------------------------------------------------------------------- */
+
+      .tl-pagination {
+        --colour-link-text: var(--tl-colour-text-link, #7f238b);
+        --colour-link-text-hover: var(
+          --tl-colour-text-link-hover,
+          var(--tl-colour-text-link, #420065)
+        );
+        --colour-link-text-current: var(--tl-colour-page, #ffffff);
+        --colour-link-background-current: var(--tl-colour-primary, #420065);
+        --colour-ellipsis: var(--tl-colour-text, #222222);
+        --colour-focus-highlight: var(--tl-colour-highlight-focus, #7f238b);
+        --colour-focus-contrasting: var(--tl-colour-contrasting-focus, #ffffff);
+
+        /* Must match the maximum number of items rendered in the list */
+        --columns: 10;
+      }
+
+      nav.tl-pagination {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.5rem;
+        max-inline-size: 50ch;
+      }
+
+      nav.tl-pagination ol {
+        display: grid;
+        grid-template-columns: repeat(var(--columns), minmax(24px, 44px));
+        grid-row: 1;
+        grid-column: 1 / -1;
+        justify-content: space-between;
+        padding: 0;
+        margin: 0;
+        list-style: none;
+      }
+
+      /* The hidden text beside each ellipsis keeps the sizing of its utility class,
+   so the span rules leave it alone */
+      nav.tl-pagination a,
+      nav.tl-pagination span:not(.visually-hidden) {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-inline-size: 24px;
+        min-block-size: 44px;
+      }
+
+      nav.tl-pagination ol a,
+      nav.tl-pagination ol span:not(.visually-hidden) {
+        inline-size: 100%;
+      }
+
+      nav.tl-pagination a {
+        color: var(--colour-link-text);
+      }
+
+      nav.tl-pagination span {
+        color: var(--colour-ellipsis);
+      }
+
+      /* Previous link */
+      nav.tl-pagination > a:first-child {
+        grid-row: 2;
+        grid-column: 1;
+        justify-self: start;
+      }
+
+      /* Next link */
+      nav.tl-pagination > ol + a {
+        grid-row: 2;
+        grid-column: 2;
+        justify-self: end;
+      }
+
+      /* State styles */
+      nav.tl-pagination a:visited {
+        color: var(--colour-link-text);
+      }
+
+      nav.tl-pagination a[aria-current="page"] {
+        font-weight: bold;
+        color: var(--colour-link-text-current);
+        background-color: var(--colour-link-background-current);
+      }
+
+      nav.tl-pagination a:focus-visible {
+        outline: 3px solid var(--colour-focus-highlight);
+        outline-offset: 3px;
+        box-shadow: 0 0 0 6px var(--colour-focus-contrasting);
+      }
+
+      nav.tl-pagination a:hover,
+      nav.tl-pagination a:visited:hover {
+        color: var(--colour-link-text-hover);
+      }
+
+      nav.tl-pagination a[aria-current="page"]:hover {
+        color: var(--colour-link-text-current);
+      }
+
+      /* Background colours are removed in forced colours mode, so use a border to identify the current page */
+      @media (forced-colors: active) {
+        nav.tl-pagination a[aria-current="page"] {
+          border: 2px solid currentcolor;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <main>
+      <nav class="tl-pagination" aria-label="Pagination">
+        <ol role="list">
+          <li>
+            <a href="?page=1">1</a>
+          </li>
+
+          <li>
+            <a href="?page=2">2</a>
+          </li>
+
+          <li>
+            <a href="?page=3" aria-current="page">3</a>
+          </li>
+
+          <li>
+            <a href="?page=4">4</a>
+          </li>
+
+          <li>
+            <a href="?page=5">5</a>
+          </li>
+        </ol>
+      </nav>
+    </main>
+
+    <script>
+      /* -------------------------------------------------------------------------- */
+      /* Boilerplate JS                                                             */
+      /* -------------------------------------------------------------------------- */
+
+      // Record the resolved colour scheme on <html>, so the stylesheet can switch its
+      // tokens. A page which sets data-user-color-scheme itself is left alone
+      const darkMode = window.matchMedia("(prefers-color-scheme: dark)");
+
+      function applyColourScheme() {
+        if (document.documentElement.hasAttribute("data-user-color-scheme"))
+          return;
+        document.documentElement.setAttribute(
+          "data-color-scheme-resolved",
+          darkMode.matches ? "dark" : "light",
+        );
+      }
+
+      darkMode.addEventListener("change", applyColourScheme);
+      applyColourScheme();
+    </script>
+    <script>
+      /**
+       * Pagination. This JS is for demo purposes only.
+       *
+       * The markup is complete without JavaScript: every page is a real link, and a
+       * server would render the right set of links for each page. This script stands
+       * in for that server. It reads the current page from the "page" query
+       * parameter and rebuilds the component to match, following the same truncation
+       * rules as the markup, so that every link in the demo leads to a working page.
+       */
+
+      // The most items the list can hold, counting the first and last pages and any
+      // ellipses. Keep this in step with --columns in the CSS
+      const MAX_ITEMS = 10;
+
+      // A window of `size` pages centred on the current page, kept between the first
+      // and last pages, which are always shown on their own
+      function clampRange(current, total, size) {
+        let start = Math.max(2, current - Math.floor((size - 1) / 2));
+        const end = Math.min(total - 1, start + size - 1);
+        // If the end was clamped, pull the start back so the window keeps its size
+        start = Math.max(2, end - size + 1);
+        return { start, end };
+      }
+
+      // One ellipsis for each side of the window which stops short of the first or last page
+      function countEllipses(range, total) {
+        return (range.start > 2 ? 1 : 0) + (range.end < total - 1 ? 1 : 0);
+      }
+
+      // The items to render: page numbers, with null wherever an ellipsis goes
+      function getItems(current, total) {
+        if (total <= MAX_ITEMS) {
+          return Array.from({ length: total }, (_, index) => index + 1);
+        }
+
+        // The first and last pages take two of the slots, and each ellipsis takes
+        // another, so the window shrinks to make room. Shrinking it can pull an edge
+        // away from the first or last page, which then needs an ellipsis of its own,
+        // so the window is sized once more when that happens
+        const middle = MAX_ITEMS - 2;
+        let range = clampRange(current, total, middle);
+        let ellipses = countEllipses(range, total);
+        range = clampRange(current, total, middle - ellipses);
+
+        if (countEllipses(range, total) !== ellipses) {
+          ellipses = countEllipses(range, total);
+          range = clampRange(current, total, middle - ellipses);
+        }
+
+        const items = [1];
+        if (range.start > 2) items.push(null);
+        for (let page = range.start; page <= range.end; page++)
+          items.push(page);
+        if (range.end < total - 1) items.push(null);
+        items.push(total);
+        return items;
+      }
+
+      // A link to a page, with an accessible name when the label alone is not enough
+      function createLink(page, label, name) {
+        const link = document.createElement("a");
+        link.href = `?page=${page}`;
+        link.textContent = label;
+        if (name) link.setAttribute("aria-label", name);
+        return link;
+      }
+
+      function render(nav, current, total) {
+        const children = [];
+        // Previous and Next are only needed once pages have been truncated
+        const truncated = total > MAX_ITEMS;
+
+        // A non-breaking space keeps each arrow on the same line as its word
+        if (truncated && current > 1) {
+          children.push(
+            createLink(current - 1, "<\u00A0Previous", "Previous page"),
+          );
+        }
+
+        const list = document.createElement("ol");
+        // Safari and VoiceOver stop treating a list as a list once its bullets are removed
+        list.setAttribute("role", "list");
+
+        for (const page of getItems(current, total)) {
+          const item = document.createElement("li");
+          if (page === null) {
+            // Screen readers treat the character as punctuation and may skip it, so
+            // it is hidden and the word is given as text instead
+            const ellipsis = document.createElement("span");
+            ellipsis.setAttribute("aria-hidden", "true");
+            ellipsis.textContent = "⋯";
+
+            const text = document.createElement("span");
+            text.className = "visually-hidden";
+            text.textContent = "Ellipsis";
+
+            item.append(ellipsis, text);
+          } else {
+            const link = createLink(page, String(page));
+            if (page === current) link.setAttribute("aria-current", "page");
+            item.append(link);
+          }
+          list.append(item);
+        }
+        children.push(list);
+
+        if (truncated && current < total) {
+          children.push(createLink(current + 1, "Next\u00A0>", "Next page"));
+        }
+
+        nav.replaceChildren(...children);
+      }
+
+      document.querySelectorAll(".tl-pagination").forEach((nav) => {
+        // The last page number is the total, and the current link is the page the
+        // markup was rendered for
+        const total = Number(nav.querySelector("li:last-child a").textContent);
+        const initial = Number(
+          nav.querySelector("[aria-current='page']").textContent,
+        );
+        const page = Number(
+          new URLSearchParams(window.location.search).get("page"),
+        );
+
+        // Leave the markup alone unless the URL asks for a different, real page
+        if (
+          Number.isInteger(page) &&
+          page >= 1 &&
+          page <= total &&
+          page !== initial
+        ) {
+          render(nav, page, total);
+        }
+      });
+    </script>
+  </body>
+</html>
