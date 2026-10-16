@@ -2,7 +2,7 @@
 
 Accessible components with working examples, code, guidance, and the test scenarios we use to check them.
 
-You can read our blog post, [Introducing the Accessible Components Library](https://tetralogical.com/blog/2026/10/09/accessible-components-library/) for more information about this project.
+You can read our blog post, [Introducing the Accessible Components Library](https://tetralogical.com/blog/2026/10/14/accessible-components-library/) for more information about this project.
 
 > [!NOTE]
 > These are components we use in our own work. You're free to reuse or adapt them, but they're not a production-ready design system. Test them in your own context before you rely on them.
@@ -125,4 +125,4 @@ We're not accepting pull requests at the moment. [The contributing guide](CONTRI
 
 This project is released under the [ISC licence](LICENSE). You're free to use, copy, modify and share the code and documentation, including in commercial projects, as long as the copyright notice stays with it.
 
-Last updated: 13 October 2026.
+Last updated on 16 October 2026.

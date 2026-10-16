@@ -186,4 +186,4 @@ There are many types of text `input`, including `number`, `email`, `password`, `
 
 * `month` is not supported in Firefox
 
-Last updated: 13 October 2026.
+Last updated on 13 October 2026.
