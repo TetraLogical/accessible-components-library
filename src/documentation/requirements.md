@@ -200,4 +200,4 @@ Helping people to read and understand text content.
 * Text can be understood by people with lower reading ability or an alternative is provided ([3.1.5 Reading Level](https://www.w3.org/WAI/WCAG22/Understanding/reading-level.html), Level AAA)
 * Provide pronunciation where necessary for meaning ([3.1.6 Pronunciation](https://www.w3.org/WAI/WCAG22/Understanding/pronunciation.html), Level AAA)
 
-Last updated: 13 October 2026.
+Last updated on 13 October 2026.

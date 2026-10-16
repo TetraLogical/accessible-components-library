@@ -1,6 +1,6 @@
 {
   "name": "accessible-components-library",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A collection of components which have been tested for accessibility.",
   "type": "module",
   "engines": {

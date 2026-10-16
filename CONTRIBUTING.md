@@ -14,6 +14,10 @@ If a component has a problem, or the documentation is wrong, [open an issue](htt
 
 We investigate any accessibility problems as bugs, and we want this library to be as useful as possible. So, please don't hold back a report just because an issue feels minor.
 
+## Reporting a security problem
+
+If you think you've found a security problem, don't open an issue, because anyone can read it. Follow our [security policy](SECURITY.md) to report it privately instead.
+
 ## Suggesting an improvement
 
 If you think we're missing a component or variant, a test scenario, or you think theres a better way something could work, [open an issue](https://github.com/TetraLogical/accessible-components-library/issues/new/choose). Describe what you think is missing, who it helps, or anything else that might be useful, like WCAG criteria or links to similar components.
@@ -36,4 +40,4 @@ Whatever we decide to do with an issue, we'll try to be as transparent as possib
 
 The library is released under the [ISC licence](LICENSE), so you're free to fork it and adapt it for your own design system or projects, as long as you reference the copyright notice. [The development guide](DEVELOPMENT.md) explains how the repository is put together, how to build and test it, and how to add a component, in case you want to keep to the same structure.
 
-Last updated: 13 October 2026.
+Last updated on 16 October 2026.

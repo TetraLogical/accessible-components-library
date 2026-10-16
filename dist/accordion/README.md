@@ -239,4 +239,4 @@ This component has been tested with the following browsers and assistive technol
 | Browser zoom | No issues | No notes |
 | prefers-reduced-motion | Not applicable | There are no animations to reduce |
 
-Last updated: 13 October 2026.
+Last updated on 13 October 2026.

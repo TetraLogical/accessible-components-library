@@ -162,4 +162,4 @@ A manual step should gather whatever context a reviewer needs, such as the link 
 
 Before a component is published we test it with the assistive technology and browser pairings listed in [the requirements](src/documentation/requirements.md), and record the results in the README's compatibility table.
 
-Last updated: 13 October 2026.
+Last updated on 13 October 2026.
