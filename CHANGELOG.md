@@ -4,6 +4,15 @@ All notable changes to this project are recorded here. The format follows [Keep 
 
 ## Unreleased
 
+## 1.0.3 - 2026-11-20
+
+Added:
+- CI check that fails a pull request if it does not update the changelog (add the `skip changelog` label to bypass it)
+- `ROADMAP.md`
+
+Updated:
+- `README.md` to link to the Roadmap
+
 ## 1.0.2 - 2026-10-16
 
 Fixed:
