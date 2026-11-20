@@ -15,7 +15,7 @@ For each component, we've documented:
 - Where to use it
 - Accessibility requirements
 
-Bug reports and suggestions are welcome, so please [open an issue](https://github.com/TetraLogical/accessible-components-library/issues) if you spot a problem or think something could be better. We're not accepting pull requests at the moment, but we read every issue.
+Bug reports and suggestions are welcome, so please [open an issue](https://github.com/TetraLogical/accessible-components-library/issues) if you spot a problem or think something could be better. We're not accepting pull requests at the moment, but we read every issue. You can also check out our [roadmap](ROADMAP.md), to see what we're working on and what's coming next.
 
 ## Accessibility requirements
 
@@ -125,4 +125,4 @@ We're not accepting pull requests at the moment. [The contributing guide](CONTRI
 
 This project is released under the [ISC licence](LICENSE). You're free to use, copy, modify and share the code and documentation, including in commercial projects, as long as the copyright notice stays with it.
 
-Last updated on 16 October 2026.
+Last updated on 28 October 2026.
