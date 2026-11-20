@@ -1,0 +1,49 @@
+name: Changelog
+
+on:
+  pull_request:
+    # labeled and unlabeled are included so that adding or removing the
+    # skip label re-runs the check without needing a new commit
+    types: [opened, synchronize, reopened, labeled, unlabeled]
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  check:
+    name: Check the changelog has been updated
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check CHANGELOG.md is included in the pull request
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          SKIP_LABELLED: ${{ contains(github.event.pull_request.labels.*.name, 'skip changelog') }}
+        run: |
+          if [ "$SKIP_LABELLED" = "true" ]; then
+            echo "::notice::Skipping the changelog check because the pull request has the 'skip changelog' label."
+            exit 0
+          fi
+
+          files=$(gh api "repos/${REPOSITORY}/pulls/${PR_NUMBER}/files" --paginate --jq '.[].filename')
+
+          # The roadmap is reviewed on its own schedule and is not a release note,
+          # so a pull request that only changes it does not need a changelog entry
+          if [ "$files" = "ROADMAP.md" ]; then
+            echo "::notice::Skipping the changelog check because the pull request only updates ROADMAP.md."
+            exit 0
+          fi
+
+          if grep -qx 'CHANGELOG.md' <<< "$files"; then
+            echo "CHANGELOG.md has been updated."
+            exit 0
+          fi
+
+          echo "::error file=CHANGELOG.md::This pull request does not update CHANGELOG.md. Add an entry under 'Unreleased', or add the 'skip changelog' label if the change does not need one."
+          echo
+          echo "Files changed in this pull request:"
+          echo "$files"
+          exit 1
